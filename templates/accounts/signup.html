@@ -1,0 +1,15 @@
+회원가입
+<div style="text-align: center; max-width: 500px; margin: 4rem auto">
+  <div class="mb-4">
+    <h4>SingUp</h4>
+  </div>
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+      <p>{{ form.as_p }}</p>
+     
+
+    </table>
+    <input type="submit" class="btn btn-dark rounded-pill col-6 mt-3" />
+  </form>
+</div>
