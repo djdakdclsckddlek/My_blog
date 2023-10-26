@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from .models import User
 from django.views.generic import View, CreateView, UpdateView
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from .forms import SignupForm, CustomUserChangeForm
 
@@ -33,10 +35,10 @@ class UserLoginView(LoginView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = '/accounts/login/'
+    next_page = '/blog/blogposts/'
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = CustomUserChangeForm
     template_name = 'accounts/form.html'
@@ -44,3 +46,17 @@ class UserUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+@login_required
+def user_profile(request, email):
+    # 링크의 이메일을 db에서 찾음 // 없으면 404페이지
+    user = get_object_or_404(User, email=email)
+
+    # 로그인한 이메일과 링크의 이메일이 같은지 확인
+    if request.user.email == user.email:
+        context = {'profile_user': user}
+        return render(request, 'accounts/profile.html', context)
+
+    else:
+        return HttpResponse('장난치지마라')

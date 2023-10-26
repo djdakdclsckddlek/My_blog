@@ -8,11 +8,12 @@
     <title></title>
   </head>
   <body>
-
+<h1>프로필페이지</h1>
     <form action="" method="post">
       {% csrf_token %}
       <table>
-        {{ form.as_table }}
+        <p> {{ profile_user.email }}</p>
+       <p> {{ profile_user.username }}</p>
       </table>
       <input type="submit" value="Submit" />
     </form>

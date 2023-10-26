@@ -44,7 +44,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     email = models.EmailField(max_length=50, db_index=True, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = BooleanField(default=False)
-
+    nickname = models.CharField(max_length=50, blank=True, null=True)
+    introduce = models.CharField(max_length=200, blank=True, null=True)
+    profile_img = models.ImageField(
+        upload_to='accounts/profile_imgs', null=True)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
