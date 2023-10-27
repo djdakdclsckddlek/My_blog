@@ -1,0 +1,40 @@
+{% extends "blog/base.html" %}
+  
+{% block title %}글목록{% endblock title %}
+
+{% block content %}
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4">포스트 목록</h2>
+    <hr />
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {% for post in object_list %}
+      <a href="{{ post.pk }}">
+        <div
+          class="study_div bg-white max-width:100px rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out">
+          <div class="post_title p-4">
+            <p class="title text-xl font-bold">{{ post.title }}</p>
+            {% if post.updated_at %}
+            <p class="study_deadline text-sm">{{ post.updated_at }}</p>
+            {% else %}
+            <p class="study_deadline text-sm">{{ post.created_at }}</p>
+            {% endif %}
+          </div>
+          <div class="post_author p-4 flex flex-row gap-2 items-center">
+            <p class="text-sm">{{ post.author.username }}</p>
+            <img src="{{post.thumbnail}}" alt="" class="w-8 h-8 rounded-full" />
+          </div>
+          <div class="post_detail p-4 text-sm">
+            <p>{{post.content}}</p>
+          </div>
+          <div class="post_views p-4 flex flex-row gap-2">
+            <p class="text-sm">조회수: {{post.views}}</p>
+          </div>
+          <div class="post_likecount p-4 flex flex-row gap-2">
+            <p class="text-sm">좋아요: {{post.likecount}}</p>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endblock content %}

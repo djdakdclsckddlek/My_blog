@@ -25,33 +25,34 @@ class SignupView(CreateView):
     model = User
     form_class = SignupForm
     template_name = 'accounts/signup.html'
-    success_url = reverse_lazy('blog:posts')
+    success_url = reverse_lazy('blog:post_list')
 # Create your views here.
 
 
 class UserLoginView(LoginView):
     template_name = 'accounts/form.html'
-    next_page = reverse_lazy('blog:posts')
+    next_page = reverse_lazy('blog:post_list')
 
 
 class UserLogoutView(LogoutView):
-    next_page = '/blog/blogposts/'
+    next_page = 'blog:post_list'
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = CustomUserChangeForm
     template_name = 'accounts/form.html'
-    success_url = reverse_lazy('blog:posts')
+    success_url = reverse_lazy('accounts:profile')
 
     def get_object(self, queryset=None):
         return self.request.user
 
 
 @login_required
-def user_profile(request, email):
+def user_profile(request):
+    user = request.user
     # 링크의 이메일을 db에서 찾음 // 없으면 404페이지
-    user = get_object_or_404(User, email=email)
+    user = get_object_or_404(User, pk=user.pk)
 
     # 로그인한 이메일과 링크의 이메일이 같은지 확인
     if request.user.email == user.email:

@@ -53,3 +53,9 @@ class CustomUserChangeForm(UserChangeForm):
     profile_img = forms.ImageField(required=False)
     nickname = forms.CharField(max_length=50, required=False)
     introduce = forms.CharField(max_length=200, required=False)
+    password = None
+    # password = forms.CharField(required=False, disabled=True)
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['password'].widget = forms.HiddenInput()

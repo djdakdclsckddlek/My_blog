@@ -1,25 +1,33 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko-KR">
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
   </head>
   <body>
-<h1>프로필페이지</h1>
+    <h1>프로필페이지</h1>
     <form action="" method="post">
       {% csrf_token %}
       <table>
-        <p> {{ profile_user.email }}</p>
-       <p> {{ profile_user.username }}</p>
+        <p>이메일: {{ profile_user.email }}</p>
+        <p>닉네임: {{ profile_user.nickname }}</p>
+        <p>사용자 이름: {{ profile_user.username }}</p>
+        {% if profile_user.profile_img %}
+        <p><img src="{{ profile_user.profile_img.url }}" width="200px" alt="profile_img"></p>
+        {% else %}
+        <p>프로필이미지없음</p>
+        {% endif %}
+        {% if profile_user.introduce %}
+        <p>자기소개: {{ profile_user.introduce }}</p>
+        {% else %}
+        <p>자기소개를 해보세요.</p>
+        {% endif %}
+        <p>최근 로그인 기록:{{ profile_user.last_login|date:"Y/m/d H:i" }}</p>
       </table>
-      <input type="submit" value="Submit" />
+      <a href="{% url "accounts:update" %}"><input type="button" value="프로필변경" /></a>
     </form>
-
   </body>
 </html>
-
-
-  

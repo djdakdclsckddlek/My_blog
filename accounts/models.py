@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     nickname = models.CharField(max_length=50, blank=True, null=True)
     introduce = models.CharField(max_length=200, blank=True, null=True)
     profile_img = models.ImageField(
-        upload_to='accounts/profile_imgs', null=True)
+        upload_to='accounts/profile_imgs', blank=True, null=True)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

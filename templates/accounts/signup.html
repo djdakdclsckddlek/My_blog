@@ -1,5 +1,4 @@
 
-{% csrf_token %}    
 <!DOCTYPE html>
 <html lang="ko-KR">
   <head>
@@ -11,15 +10,23 @@
   <body>
     <div style="text-align: center; max-width: 500px; margin: 4rem auto">
       <div class="mb-4">
-    회원가입
-    <h4>SingUp</h4>
-  </div>
-  <form action="" method="post">
-      <p>{{ form.username }}</p>
-      <p>{{ form.email }}</p>
-      <p>{{ form.password1 }}{{ form.password1.errors }}</p>
-      <p>{{ form.password2 }}{{ form.password2.errors }}</p>
-      
+        회원가입
+        <h4>SingUp</h4>
+      </div>
+      <form action="" method="post">
+    {% csrf_token %}    
+    <p>
+      <input type="text" name="username" placeholder="이름">
+    </p>
+    <p>
+      <input type="email" name="email" placeholder="이메일">
+    </p>
+    <p>
+      <input type="password" name="password1" placeholder="비밀번호">
+    </p>
+    <p>
+      <input type="password" name="password2" placeholder="비밀번호 확인">
+    </p>
   
     <input type="submit" class="btn btn-dark rounded-pill col-6 mt-3" />
   </form>
