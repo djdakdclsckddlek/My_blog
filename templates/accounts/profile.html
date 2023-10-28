@@ -1,3 +1,4 @@
+{% extends "accounts/account_base.html" %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ko-KR">
@@ -5,9 +6,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
+    <title>{% block title %}내 프로필{% endblock title %}</title>
   </head>
   <body>
+    {% block content %}
     <h1>프로필페이지</h1>
     <form action="" method="post">
       {% csrf_token %}
@@ -29,5 +31,6 @@
       </table>
       <a href="{% url "accounts:update" %}"><input type="button" value="프로필변경" /></a>
     </form>
+    {% endblock content %}
   </body>
 </html>
