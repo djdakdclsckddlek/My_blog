@@ -1,9 +1,9 @@
-{% extends "blog/base.html" %} {% block title %}글목록{% endblock title %}
+{% extends "blog/base.html" %} {% block title %}글 목록{% endblock title %}
 
 <hr />
 {% block content %}
 <div class="max-w-7xl mx-auto">
-  <h2 class="text-2xl font-bold mb-4">포스트 목록</h2>
+  <h2 class="text-2xl font-bold mb-4">내 블로그</h2>
   <hr />
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     {% for post in object_list %}
@@ -20,7 +20,7 @@
           {% endif %}
         </div>
         <div class="post_author p-4 flex flex-row gap-2 items-center">
-          <p class="text-sm">{{ post.author.nickname }}</p>
+          <p class="text-sm">{{ post.author.username }}</p>
           <img src="{{post.thumbnail}}" alt="" class="w-8 h-8 rounded-full" />
         </div>
         <div class="post_detail p-4 text-sm">

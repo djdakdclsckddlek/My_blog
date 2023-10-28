@@ -49,7 +49,11 @@
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <a href="#"
+            {% if request.user.username %}
+            <a href="{% url 'blog:post_user' request.user.username %}"
+            {% else %}
+            <a href="{% url 'accounts:login' %}"
+            {% endif %}
               class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
               aria-current="page">내블로그</a>
             <a href="{% url 'blog:post_list_popular' %}"
@@ -101,8 +105,10 @@
               tabindex="-1" id="user-menu-item-0">Your Profile</a>
             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
               id="user-menu-item-1">Settings</a>
-            <a href="{% url 'accounts:logout' %}" class="logout block px-4 py-2 text-sm text-gray-700" role="menuitem"
+              {% if request.user.username %}
+              <a href="{% url 'accounts:logout' %}" class="logout block px-4 py-2 text-sm text-gray-700" role="menuitem"
               tabindex="-1" id="user-menu-item-2">Sign out</a>
+              {% endif %}
           </div>
         </div>
       </div>

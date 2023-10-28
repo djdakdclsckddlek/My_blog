@@ -16,6 +16,16 @@ class PostListView(ListView):
     template_name = 'blog/post_list.html'
 
 
+class PostListUserView(ListView):
+
+    model = Post
+    template_name = 'blog/my_post.html'
+
+    def get_queryset(self):
+
+        return Post.objects.filter(author__username=self.kwargs['blog']).order_by('-created_at')
+
+
 class PostPopularView(ListView):
 
     model = Post
