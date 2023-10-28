@@ -1,8 +1,7 @@
-{% extends "blog/base.html" %}
-{% block title %}글 내용{% endblock title %}
-
-
-{% block content %}
+{% extends "blog/base.html" %} {% block title %}글 내용{% endblock title %}
+{%block content %}
 <p>제목{{ object.title }}</p>
+<p>글쓴이:{{ object.author }}</p>
 <p>내용{{ object.content }}</p>
+
 {% endblock content %}

@@ -39,7 +39,7 @@
           <p>{{post.content}}</p>
         </div>
         <div class="post_views p-4 flex flex-row gap-2">
-          <p class="text-sm">조회수: {{post.views}}</p>
+          <p class="text-sm">조회수: {{ post.views | add:-1 }}</p>
         </div>
         <div class="post_likecount p-4 flex flex-row gap-2">
           <p class="text-sm">좋아요: {{post.likecount}}</p>
