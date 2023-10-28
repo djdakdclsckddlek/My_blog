@@ -1,5 +1,7 @@
+from typing import Any
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404, HttpResponse
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
@@ -14,6 +16,13 @@ class PostListView(ListView):
     template_name = 'blog/post_list.html'
 
 
+class PostPopularView(ListView):
+
+    model = Post
+    template_name = 'blog/post_list.html'
+    queryset = Post.objects.all().order_by('-views')
+
+
 class PostDetailView(DetailView):
 
     template_name = 'blog/post_detail.html'
@@ -21,6 +30,8 @@ class PostDetailView(DetailView):
 
     def get_object(self, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        post.views += 1
+        post.save()
         return post
 
 
@@ -29,7 +40,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = 'blog/post_create.html'
     model = Post
     form_class = PostForm
-    success_url = reverse_lazy('blog:post_detail')
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
 

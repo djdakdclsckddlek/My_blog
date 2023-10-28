@@ -51,10 +51,10 @@
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <a href="#"
               class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-              aria-current="page">블로그</a>
-            <a href="#"
+              aria-current="page">내블로그</a>
+            <a href="{% url 'blog:post_list_popular' %}"
               class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium">인기글</a>
-            <a href="#"
+            <a href="{% url 'blog:post_create' %}"
               class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium">글쓰기</a>
 
           </div>
