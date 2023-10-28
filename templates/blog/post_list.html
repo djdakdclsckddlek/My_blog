@@ -1,4 +1,5 @@
-{% extends "blog/base.html" %} {% block title %}글목록{% endblock title %}
+{% extends "blog/base.html" %}{% load static %} <br />
+{% block title%}글목록{%endblock title %}
 
 <hr />
 {% block content %}
@@ -9,9 +10,10 @@
     {% for post in object_list %}
     <a href="{% url 'blog:post_detail' post.pk %}">
       <div
-        class="study_div bg-white max-width:100px rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out"
+        class="bg-white max-width:100px rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out"
       >
         <div class="post_title p-4">
+          <img src="{{post.thumbnail}}" alt="" class="w-8 h-8 rounded-full" />
           <p class="title text-xl font-bold">{{ post.title }}</p>
           {% if post.updated_at %}
           <p class="study_deadline text-sm">{{ post.updated_at }}</p>
@@ -21,7 +23,17 @@
         </div>
         <div class="post_author p-4 flex flex-row gap-2 items-center">
           <p class="text-sm">{{ post.author.nickname }}</p>
-          <img src="{{post.thumbnail}}" alt="" class="w-8 h-8 rounded-full" />
+          {% if post.author.profile_img %}
+          <img
+            class="h-8 w-8 rounded-full"
+            src="{{ post.author.profile_img.url }}"
+          />
+          {% else %}
+          <img
+            class="h-8 w-8 rounded-full"
+            src="{% static 'profile-default.jpg' %}"
+          />
+          {% endif %}
         </div>
         <div class="post_detail p-4 text-sm">
           <p>{{post.content}}</p>
