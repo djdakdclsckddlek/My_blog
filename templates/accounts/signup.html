@@ -30,6 +30,15 @@
 
         <input type="submit" class="btn btn-dark rounded-pill col-6 mt-3" />
       </form>
+      <div class="alert alert-danger" role="alert">
+        <ul>
+          {% for field, errors in form.errors.items %}
+          <li>
+            {{ field }}: {% for error in errors %} {{ error }} {% endfor %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </body>
 </html>

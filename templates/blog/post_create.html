@@ -1,6 +1,12 @@
-{% extends 'blog/base.html' %} {% block content %}
-
-<h1>Create a new post</h1>
+{% extends 'blog/base.html' %}
+<br />
+{% block title %}{% if "/create/" in request.path %} New Post {% else %}
+EditPost {% endif %} {% endblock %} {% block content %} <a />
+{% if "/create/" in request.path %}
+<h1>글쓰기</h1>
+{% else %}
+<h1>글 수정</h1>
+{% endif %}
 
 <form action="" method="post">
   {% csrf_token %}
@@ -40,7 +46,9 @@
     />
   </div>
 
-  <input type="submit" value="Create post" class="btn btn-primary" />
+  <input type="submit" value={% if "/create/" in request.path %}"Create post"
+  {%else %} "Edit post" {% endif %} class="btn btn-primary bg-blue-300 rounded"
+  />
 </form>
 
 {% endblock %}

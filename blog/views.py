@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404, HttpResponse
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
+from django.core.exceptions import PermissionDenied
 
 from .models import Post
 from .forms import PostForm
@@ -62,12 +63,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
 
-    template_name = 'blog/post_update.html'
+    template_name = 'blog/post_create.html'
     model = Post
-    fields = ['title', 'content']
+    form_class = PostForm
 
     def get_object(self, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs['pk'])
         if post.author != self.request.user:
-            raise HttpResponse('글을 수정할 수 있는 권한이 없습니다!')
+            raise PermissionDenied('글을 수정할 수 있는 권한이 없습니다!')
         return post
