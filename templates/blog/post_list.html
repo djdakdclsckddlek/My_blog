@@ -13,7 +13,11 @@
         class="bg-white max-width:100px rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out"
       >
         <div class="post_title p-4">
-          <img src="{{post.thumbnail}}" alt="" class="w-8 h-8 rounded-full" />
+          <img
+            src="{% if post.thumbnail %}{{post.thumbnail.url}}{% endif %}"
+            alt=""
+            class="w-8 h-8 rounded-full"
+          />
           <p class="title text-xl font-bold">{{ post.title }}</p>
           {% if post.updated_at %}
           <p class="study_deadline text-sm">{{ post.updated_at }}</p>
@@ -39,7 +43,7 @@
           {% endif %}
         </div>
         <div class="post_detail p-4 text-sm">
-          <p>{{post.content}}</p>
+          <p>{{ post.content | truncatechars:100 }}</p>
         </div>
         <div class="post_views p-4 flex flex-row gap-2">
           <p class="text-sm">조회수: {{ post.views | add:-1 }}</p>

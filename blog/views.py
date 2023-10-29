@@ -56,8 +56,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
-
         form.instance.author = self.request.user
+
         return super().form_valid(form)
 
 
@@ -69,6 +69,11 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs['pk'])
-        if post.author != self.request.user:
+        # 글을 수정할 시 작성한 회원이거나 관리자만 글을 수정할 수 있음.
+        if post.author == self.request.user or self.request.user.is_superuser:
+            return post
+        else:
             raise PermissionDenied('글을 수정할 수 있는 권한이 없습니다!')
-        return post
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})

@@ -7,5 +7,5 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'thumbnail', 'file_upload']
 
-    thumbnail = forms.ImageField(label='Thumbnail', required=False)
-    file_upload = forms.FileField(label='File_field', required=False)
+    # thumbnail = forms.ImageField(required=False)
+    # file_upload = forms.FileField(required=False)
