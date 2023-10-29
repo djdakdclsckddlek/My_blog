@@ -22,8 +22,11 @@
           {% endif %}
         </div>
         <div class="post_author p-4 flex flex-row gap-2 items-center">
+          {% if post.author.nickname %}
           <p class="text-sm">{{ post.author.nickname }}</p>
-          {% if post.author.profile_img %}
+          {% else %}
+          <p class="text-sm">{{ post.author.username }}</p>
+          {% endif %} {% if post.author.profile_img %}
           <img
             class="h-8 w-8 rounded-full"
             src="{{ post.author.profile_img.url }}"

@@ -1,7 +1,11 @@
 {% extends "blog/base.html" %} {% block title %}글 내용{% endblock title %}
 {%block content %}
 <p>제목{{ object.title }}</p>
+{% if object.author.nickname %}
 <p>글쓴이:{{ object.author.nickname }}</p>
+{% else %}
+<p>글쓴이:{{ object.author.username }}</p>
+{% endif %}
 <p>내용{{ object.content }}</p>
 
 {% endblock content %}
