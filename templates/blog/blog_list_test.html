@@ -1,5 +1,10 @@
-{% extends "blog/base.html" %}{% load static %} <br />
+{% comment %} {% extends "blog/base.html" %}{% load static %} <br />
 {% block title%}테스트글목록{%endblock title %}
+
+<!-- 플렉스 column 3개 a,
+div, div 320,376 a(썸네일 이미지) 없다면 생략 div(글제목, 내용, 날짜, 댓글수)
+제목내용에 a테그, //밑에 날짜 댓글 hr div(프로필사진, 사용자이름, 좋아요 수)  
+ -->
 
 <hr />
 {% block content %}
@@ -71,4 +76,4 @@
     {% endfor %}
 </div>
 </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}
