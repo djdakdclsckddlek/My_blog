@@ -1,0 +1,90 @@
+{% extends "accounts/account_base.html" %} <br />
+{% block title%}프로필 변경 {% endblock title %} <br />
+{% load static %}{% block content%}
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table>
+    <tbody>
+      <tr>
+        <th><label for="id_username">Username:</label></th>
+        <td>
+          <input
+            type="text"
+            name="username"
+            value="이상해씨"
+            maxlength="20"
+            autocapitalize="none"
+            autocomplete="username"
+            required=""
+            id="id_username"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <th><label for="id_email">Email:</label></th>
+        <td>
+          <input
+            type="email"
+            name="email"
+            value="test1@test1.com"
+            maxlength="50"
+            required=""
+            id="id_email"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <th><label for="id_profile_img">Profile img:</label></th>
+        <td>
+          현재:
+          <a
+            href="/media/accounts/profile_imgs/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            >accounts/profile_imgs/다운로드.png</a
+          >
+          <input
+            type="checkbox"
+            name="profile_img-clear"
+            id="profile_img-clear_id"
+          />
+          <label for="profile_img-clear_id">취소</label><br />
+          변경:
+          <input
+            type="file"
+            name="profile_img"
+            accept="image/*"
+            id="id_profile_img"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <th><label for="id_nickname">Nickname:</label></th>
+        <td>
+          <input
+            type="text"
+            name="nickname"
+            value="이상해요"
+            maxlength="50"
+            id="id_nickname"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <th><label for="id_introduce">Introduce:</label></th>
+        <td>
+          <input
+            type="text"
+            name="introduce"
+            maxlength="200"
+            id="id_introduce"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <input type="submit" value="변경하기" />
+</form>
+{% endblock content %}

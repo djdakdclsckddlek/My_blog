@@ -46,7 +46,7 @@ class UserLogoutView(LogoutView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = CustomUserChangeForm
-    template_name = 'accounts/form.html'
+    template_name = 'accounts/profile_edit.html'
     success_url = reverse_lazy('accounts:profile')
 
     def get_object(self, queryset=None):

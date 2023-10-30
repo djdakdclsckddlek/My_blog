@@ -1,36 +1,57 @@
-{% extends "accounts/account_base.html" %}
-{% load static %}
-<!DOCTYPE html>
-<html lang="ko-KR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}내 프로필{% endblock title %}</title>
-  </head>
-  <body>
-    {% block content %}
-    <h1>프로필페이지</h1>
-    <form action="" method="post">
-      {% csrf_token %}
-      <table>
-        <p>이메일: {{ profile_user.email }}</p>
-        <p>닉네임: {{ profile_user.nickname }}</p>
-        <p>사용자 이름: {{ profile_user.username }}</p>
-        {% if profile_user.profile_img %}
-        <p><img src="{{ profile_user.profile_img.url }}" width="200px" alt="profile_img"></p>
-        {% else %}
-        <p>프로필이미지없음</p>
-        {% endif %}
-        {% if profile_user.introduce %}
-        <p>자기소개: {{ profile_user.introduce }}</p>
-        {% else %}
-        <p>자기소개를 해보세요.</p>
-        {% endif %}
-        <p>최근 로그인 기록:{{ profile_user.last_login|date:"Y/m/d H:i" }}</p>
-      </table>
-      <a href="{% url "accounts:update" %}"><input type="button" value="프로필변경" /></a>
-    </form>
-    {% endblock content %}
-  </body>
-</html>
+{% extends "accounts/account_base.html" %} <br />
+{% block title%}내 프로필 {% endblock title %} <br />
+{% load static %}{% block content%}
+<div class="flex min-h-full flex-col justify-center px-6 py-2 lg:px-8">
+  <div class="sm:mx-auto sm:w-full md:max-w-lg">
+    <img class="mx-auto h-[100px] w-auto" src="{% static 'PROFILE.png' %}" />
+  </div>
+
+  <div class="flex flex-col mx-auto w-full max-w-lg">
+    <p class="pt-10">
+      <img
+        class="h-40 w-40 m-auto rounded-full"
+        src="{% if profile_user.profile_img %}{{ profile_user.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}"
+        width="200px"
+        alt="profile_img"
+      />
+    </p>
+    <div class="flex flex-row justify-between">
+      <div class="blank text-gray-300"></div>
+      <div class="nickname">
+        <h2
+          class="mt-2 pl-[90px] text-center text-3xl font-bold leading-9 tracking-tight text-gray-900"
+        >
+          {% if profile_user.nickname %} {{ profile_user.nickname }}
+          {%else%}닉네임을 설정해주세요.{% endif %}
+        </h2>
+      </div>
+      <div class="edit_profile mt-4">
+        <a
+          class="text-lg text-purple-300 font-medium underline decoration-solid"
+          href="{% url 'accounts:update' %}"
+          >프로필 변경
+        </a>
+      </div>
+    </div>
+    <p
+      class="bg-gray-400 rounded m-auto mt-4 pt-4 pl-2 pr-2 pb-2 text-lg font-medium"
+    >
+      {% if profile_user.introduce %} {{ profile_user.introduce }} {%else%}
+      자기소개를 해보세요. {%endif %}
+    </p>
+    <div class="profile_detail pt-8 pl-4">
+      <p class="pt-4 text-lg font-medium">
+        사용자 이름: {{ profile_user.username }}
+      </p>
+      <p class="pt-2 text-lg font-medium">이메일: {{ profile_user.email }}</p>
+      <p class="pt-2 text-lg font-medium">
+        닉네임: {{ profile_user.nickname }}
+      </p>
+
+      <p class="pt-2 text-lg font-medium">
+        최근 로그인:{{ profile_user.last_login|date:"Y/m/d H:i" }}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock content %}
