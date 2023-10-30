@@ -1,5 +1,5 @@
 from typing import Any
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404, HttpResponse
@@ -22,6 +22,13 @@ class PostListUserView(ListView):
     model = Post
     template_name = 'blog/my_post.html'
 
+    # 'user' context에 User저장
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = User.objects.get(username=self.kwargs['blog'])
+        return context
+
+    # 이름으로 Post목록을 필터링
     def get_queryset(self):
 
         return Post.objects.filter(author__username=self.kwargs['blog']).order_by('-created_at')

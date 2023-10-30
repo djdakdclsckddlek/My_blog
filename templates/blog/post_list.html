@@ -1,10 +1,10 @@
 {% extends "blog/base.html" %}{% load static %} <br />
-{% block title%}테스트글목록{%endblock title %}
+{% block title%}글목록{%endblock title %}
 
 <hr />
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    <h2 class="text-2xl font-bold mb-4">테스트용 포스트 목록</h2>
+    <h2 class="text-2xl font-bold mb-4">포스트 목록</h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pl-4 pr-4">
         {% for post in object_list %}
@@ -44,7 +44,7 @@
             </div>
             <hr class="border-[#757575]">
             <div class="post_footer pt-1 pl-2 pr-2 pb-1 h-10 flex flex-row justify-between">
-                <a class="profile flex flex-row" href="#">
+                <a class="profile flex flex-row" href="{% url "blog:post_user" post.author.username %}">
                     {% if post.author.profile_img %}
                     <img class="h-7 w-7 rounded-full" src="{{ post.author.profile_img.url }}" />
                     {% else %}

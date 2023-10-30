@@ -24,13 +24,13 @@ from .forms import SignupForm, CustomUserChangeForm
 class SignupView(CreateView):
     model = User
     form_class = SignupForm
-    template_name = 'accounts/signup.html'
+    template_name = 'accounts/signuptest.html'
     success_url = reverse_lazy('blog:post_list')
 # Create your views here.
 
 
 class UserLoginView(LoginView):
-    template_name = 'accounts/form.html'
+    template_name = 'accounts/login.html'
     next_page = reverse_lazy('blog:post_list')
 
 
