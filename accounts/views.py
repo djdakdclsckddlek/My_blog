@@ -1,7 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import User
 from django.views.generic import View, CreateView, UpdateView
+from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -24,9 +25,13 @@ from .forms import SignupForm, CustomUserChangeForm
 class SignupView(CreateView):
     model = User
     form_class = SignupForm
-    template_name = 'accounts/signuptest.html'
-    success_url = reverse_lazy('blog:post_list')
-# Create your views here.
+    template_name = 'accounts/signup.html'
+
+    # 회원가입시 입력한 정보로 로그인
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('blog:post_list')
 
 
 class UserLoginView(LoginView):
