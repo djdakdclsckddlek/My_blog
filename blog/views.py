@@ -64,7 +64,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-
+        form.instance.views -= 1
         return super().form_valid(form)
 
 

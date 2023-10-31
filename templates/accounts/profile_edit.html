@@ -1,4 +1,4 @@
-{% extends "accounts/account_base.html" %} <br />
+{% extends "base.html" %} <br />
 {% block title%}프로필 변경 {% endblock title %} <br />
 {% load static %}{% block content%}
 <style>
@@ -101,6 +101,8 @@
 {% endblock content %} <br />
 {% block scripts %}
 <script>
+  // 프로필변경 스크립트 
+  // 기존 버튼을 숨긴 후 이미지를 클릭하면 버튼 이벤트 호출
   const profile_img = document.querySelector(".profile_img");
   const profile_button = document.querySelector(".profile_img_select");
 

@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}{% load static %} <br />
+{% extends "base.html" %}{% load static %} <br />
 {% block title%}글목록{%endblock title %}
 
 <hr />
@@ -23,12 +23,12 @@
             <div class="post_content post_subinfo flex flex-col pt-1 pl-2 pr-2">
                 <a href="{% url 'blog:post_detail' post.pk %}">
                     <p class="title text-[#ECECEC] text-xl font-bold">{{ post.title }}</p>
-                    <div class="post_detail text-[#ECECEC] pt-1 text-sm h-[8rem]">
-                        {% if post.thumbnail %}<p>{{ post.content | truncatechars:100 }}</p>
-                        {% else %} <p>{{ post.content | truncatechars:250 }}</p>{% endif %}
+                    <div class="post_detail text-[#ECECEC] pt-1 text-sm overflow-hidden h-[{% if post.thumbnail %}8rem{% else %}20rem{% endif %}]">
+                        {% if post.thumbnail %}<p>{{ post.content | truncatechars:150 }}</p>
+                        {% else %} <p>{{ post.content | truncatechars:350 }}</p>{% endif %}
                     </div>
                 </a>
-                <div class="post_subinfo {% if post.thumbnail %}{% else %}pt-48 {% endif %}">
+                <div class="post_subinfo ">
                     {% if post.updated_at %}
                     <span class="post_date text-[12px] text-gray-500">{{ post.updated_at }}</span>
                     {% else %}
@@ -37,7 +37,7 @@
                     <span class="post_comment text-[12px] text-gray-500">| 0개의 댓글</span>
                     <div class="post_views">
                         <p class="text-sm text-gray-500">
-                            조회수: {{ post.views | add:-1 }}
+                            조회수: {{ post.views }}
                         </p>
                     </div>
                 </div>
@@ -45,27 +45,14 @@
             <hr class="border-[#757575]">
             <div class="post_footer pt-1 pl-2 pr-2 pb-1 h-10 flex flex-row justify-between">
                 <a class="profile flex flex-row" href="{% url "blog:post_user" post.author.username %}">
-                    {% if post.author.profile_img %}
-                    <img class="h-7 w-7 rounded-full" src="{{ post.author.profile_img.url }}" />
-                    {% else %}
-                    <img class="h-7 w-7 rounded-full" src="{% static 'profile-default.jpg' %}" />
-                    {% endif %}
-                    {% if post.author.nickname %}
+                    <img class="h-7 w-7 rounded-full" src="{% if post.author.profile_img %}{{ post.author.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}" />
                     <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b class="text-[#ECECEC]">
-                            {{post.author.nickname }}</b></span>
-                    {% else %}
-                    <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b class="text-[#ECECEC]">
-                            {{ post.author.username }}</b></span>
-                    {% endif %}
+                        {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
                 </a>
-
                 <div class="post_likecount pr-4">
                     <p class="pt-2 text-sm text-[#ECECEC]">좋아요: {{post.likecount}}</p>
                 </div>
             </div>
-
-
-
         </div>
     </div>
     {% endfor %}
