@@ -4,12 +4,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import User
 from django.views.generic import View, CreateView, UpdateView
 from django.contrib.auth import login
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from .forms import SignupForm, CustomUserChangeForm
-
+from .forms import SignupForm, CustomUserChangeForm, CustomPasswordChangeForm
 # 함수기반 뷰
 # def signup(request):
 #     if request.method == 'POST':
@@ -73,3 +73,10 @@ def user_profile(request):
 
     else:
         return HttpResponse('장난치지마라')
+
+
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+
+    form_class = CustomPasswordChangeForm
+    template_name = 'accounts/change_password.html'
+    success_url = reverse_lazy('accounts:profile')
