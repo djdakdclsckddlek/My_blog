@@ -1,3 +1,4 @@
+from typing import Any
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import User
@@ -51,6 +52,12 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    # 'profile_user' context에 현재 User저장
+    def get_context_data(self, **kwargs):
+        context = super(UserUpdateView, self).get_context_data(**kwargs)
+        context['profile_user'] = self.request.user
+        return context
 
 
 @login_required

@@ -1,90 +1,122 @@
 {% extends "accounts/account_base.html" %} <br />
 {% block title%}프로필 변경 {% endblock title %} <br />
 {% load static %}{% block content%}
+<style>
+  .profile_img {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .profile_img:hover {
+    transform: scale(1.1);
+    border: 1px solid #000;
+    background-color: #ccc;
+  }
+</style>
 <form action="" method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <table>
-    <tbody>
-      <tr>
-        <th><label for="id_username">Username:</label></th>
-        <td>
-          <input
+  <div class="flex min-h-full flex-col justify-center px-6 py-2 lg:px-8">
+    <div class="sm:mx-auto sm:w-full md:max-w-lg">
+      <img class="mx-auto h-[100px] w-auto" src="{% static 'PROFILE.png' %}" />
+    </div>
+
+    <div class="flex flex-col mx-auto w-full max-w-lg">
+      <p class="pt-10">
+        <img
+          class="h-40 w-40 m-auto rounded-full profile_img hover:pointer"
+          src="{% if profile_user.profile_img %}{{ profile_user.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}"
+          width="200px"
+          alt="profile_img"
+        />
+        <input
+          class="hidden profile_img_select"
+          type="file"
+          name="profile_img"
+          accept="image/*"
+          id="id_profile_img"
+        />
+      </p>
+      <div class="flex flex-row justify-between">
+        <div class="blank text-gray-300"></div>
+        <div class="nickname">
+          <h2
+            class="mt-6 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900"
+          >
+            <input
+              class="text-center rounded"
+              type="text"
+              name="nickname"
+              value="{% if profile_user.nickname %}{{ profile_user.nickname }}"
+              placeholder="{%else%}닉네임을 설정해주세요.{% endif %}"
+              maxlength="50"
+              id="id_nickname"
+            />
+          </h2>
+        </div>
+        <div class="blank text-gray-300"></div>
+      </div>
+      <textarea
+        class="bg-gray-400 rounded m-auto mt-4 pt-4 pb-2 text-lg font-medium w-full resize-none scrollbar-hide"
+        name="introduce"
+        maxlength="200"
+        id="id_introduce"
+        rows="auto"
+      >
+      {% if profile_user.introduce %}{{ profile_user.introduce }}
+      {%else%}자기소개를 해보세요.{%endif %}
+      </textarea>
+      <div class="profile_detail pt-8 pl-4 pb-5">
+        <p class="pt-4 text-lg font-medium">
+          사용자 이름:<input
+            class="ml-2 pl-2 rounded"
             type="text"
             name="username"
-            value="이상해씨"
+            value="{{ profile_user.username }}"
             maxlength="20"
             autocapitalize="none"
             autocomplete="username"
-            required=""
+            required
             id="id_username"
           />
-        </td>
-      </tr>
-
-      <tr>
-        <th><label for="id_email">Email:</label></th>
-        <td>
-          <input
-            type="email"
-            name="email"
-            value="test1@test1.com"
-            maxlength="50"
-            required=""
-            id="id_email"
-          />
-        </td>
-      </tr>
-
-      <tr>
-        <th><label for="id_profile_img">Profile img:</label></th>
-        <td>
-          현재:
+        </p>
+        <p class="pt-2 text-md font-medium">※이름으로 블로그를 구분합니다.</p>
+        <p class="pt-2 text-lg font-medium">
+          비밀번호:
           <a
-            href="/media/accounts/profile_imgs/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
-            >accounts/profile_imgs/다운로드.png</a
+            class="text-lg text-gray-600 font-medium underline decoration-solid"
+            href="#"
+            >비밀번호 변경</a
           >
-          <input
-            type="checkbox"
-            name="profile_img-clear"
-            id="profile_img-clear_id"
-          />
-          <label for="profile_img-clear_id">취소</label><br />
-          변경:
-          <input
-            type="file"
-            name="profile_img"
-            accept="image/*"
-            id="id_profile_img"
-          />
-        </td>
-      </tr>
+        </p>
+      </div>
 
-      <tr>
-        <th><label for="id_nickname">Nickname:</label></th>
-        <td>
-          <input
-            type="text"
-            name="nickname"
-            value="이상해요"
-            maxlength="50"
-            id="id_nickname"
-          />
-        </td>
-      </tr>
-
-      <tr>
-        <th><label for="id_introduce">Introduce:</label></th>
-        <td>
-          <input
-            type="text"
-            name="introduce"
-            maxlength="200"
-            id="id_introduce"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <input type="submit" value="변경하기" />
+      <input
+        class="bg-blue-800 text-gray-300 hover:bg-blue-500 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
+        type="submit"
+        value="변경하기"
+      />
+    </div>
+  </div>
 </form>
-{% endblock content %}
+{% endblock content %} <br />
+{% block scripts %}
+<script>
+  const profile_img = document.querySelector(".profile_img");
+  const profile_button = document.querySelector(".profile_img_select");
+
+  profile_img.addEventListener("click", () => {
+    profile_button.click();
+  });
+
+  profile_button.addEventListener("change", () => {
+    const file = profile_button.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      profile_img.src = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+  });
+</script>
+{% endblock scripts %}

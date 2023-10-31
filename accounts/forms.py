@@ -48,7 +48,7 @@ class SignupForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
-        fields = ['username', 'email', 'profile_img', 'nickname', 'introduce']
+        fields = ['username', 'profile_img', 'nickname', 'introduce']
 
     profile_img = forms.ImageField(required=False)
     nickname = forms.CharField(max_length=50, required=False)
