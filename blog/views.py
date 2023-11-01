@@ -40,6 +40,11 @@ class PostPopularView(ListView):
     template_name = 'blog/post_list.html'
     queryset = Post.objects.all().order_by('-views')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order'] = {'popular': '인기글'}
+        return context
+
 
 class PostDetailView(DetailView):
 
@@ -65,6 +70,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         form.instance.views -= 1
+
         return super().form_valid(form)
 
 

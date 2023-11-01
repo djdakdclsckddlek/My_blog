@@ -4,7 +4,7 @@
 <hr />
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    <p class="pl-4 pb-2 text-lg sm:text-3xl font-bold">전체글</p>
+    <p class="pl-4 pb-2 text-lg sm:text-3xl font-bold">{% if order.popular %}{{ order.popular }}{% else %}전체글{% endif %}</p>
     <div class="ml-5 mr-5 mb-4 border-2 border-zinc-700"></div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pl-4 pr-4">
         {% for post in object_list %}

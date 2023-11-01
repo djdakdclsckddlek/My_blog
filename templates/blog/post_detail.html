@@ -1,13 +1,34 @@
 {% extends "base.html" %} {% block title %}글 내용{% endblock title %} <br />
-{%block content %}
+{%block content %} {% load markdown_deux_tags %}
+
 <p>제목{{ object.title }}</p>
 {% if object.author.nickname %}
 <p>글쓴이:{{ object.author.nickname }}</p>
 {% else %}
 <p>글쓴이:{{ object.author.username }}</p>
 {% endif %}
-<p>내용{{ object.content }}</p>
+<div class="post-content">{{ object.content|markdown }}</div>
 <p>썸네일{{ object.thumbnail }}</p>
 <p>파일{{ object.file_upload }}</p>
 
-{% endblock content %}
+{% endblock content %} {% block scripts %}
+<script>
+  const h1s = document.querySelectorAll("h1");
+  const h2s = document.querySelectorAll("h2");
+  const h3s = document.querySelectorAll("h3");
+
+  // h1, 2, 3 태그에 모두 class="text-lg"를 추가합니다.
+  h1s.forEach((h1) => {
+    h1.classList.add("text-3xl");
+    h1.classList.add("font-bold");
+  });
+  h2s.forEach((h2) => {
+    h2.classList.add("text-2xl");
+    h2.classList.add("font-bold");
+  });
+  h3s.forEach((h3) => {
+    h3.classList.add("text-xl");
+    h3.classList.add("font-bold");
+  });
+</script>
+{% endblock scripts %}

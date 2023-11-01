@@ -1,60 +1,93 @@
 {% extends 'base.html' %}
 <br />
 {% block title %}{% if "/create/" in request.path %} New Post {% else %}
-EditPost {% endif %} {% endblock %} {% block content %} <a />
+EditPost {% endif %} {% endblock %} {% block content %} {% load markdown_deux_tags %}
+<link
+rel="stylesheet"
+href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
+/>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
 {% if "/create/" in request.path %}
 <h1>글쓰기</h1>
 {% else %}
 <h1>글 수정</h1>
 {% endif %}
-
+<div class="pl-4 pr-4">
 <form action="" method="post" enctype="multipart/form-data">
   {% csrf_token %}
-
+  
   <div class="form-group">
     <label for="title">Title</label>
     <input
-      type="text"
-      class="form-control"
-      id="title"
-      name="title"
-      value="{% if post.title %}{{ post.title }}{% endif %}"
+    type="text"
+    class="form-control"
+    id="title"
+    name="title"
+    value="{% if post.title %}{{ post.title }}{% endif %}"
     />
   </div>
+  
+      
+      <div class="bg-slate-100 rounded" id="contents">
+        {% if post.content %}{{ post.content|markdown }}{% else %}<h2>제목</h2><p>내용</p>{% endif %}
+      </div>
+    <div class="form-group">
+      
+      <textarea class="content form-control hidden" id="content" name="content" rows="10">
+</textarea
+      >
+    </div>
 
-  <div class="form-group">
-    <label for="content">Content</label>
-    <textarea class="form-control" id="content" name="content" rows="10">
-{% if post.content %}{{ post.content }}{% endif %}</textarea
-    >
-  </div>
+    <div class="form-group">
+      <label for="thumbnail">Thumbnail</label>
+      <input
+        type="file"
+        class="form-control-file"
+        id="thumbnail"
+        name="thumbnail"
+        accept="image/*"
+        value="{% if post.thumbnail %}{{ post.thumbnail.url }}{% endif %}"
+      />
+    </div>
 
-  <div class="form-group">
-    <label for="thumbnail">Thumbnail</label>
-    <input
-      type="file"
-      class="form-control-file"
-      id="thumbnail"
-      name="thumbnail"
-      accept="image/*"
-      value="{% if post.thumbnail %}{{ post.thumbnail.url }}{% endif %}"
-    />
-  </div>
+    <div class="form-group">
+      <label for="file_upload">File upload</label>
+      <input
+        type="file"
+        class="form-control-file"
+        id="file_upload"
+        name="file_upload"
+        value="{% if post.file_upload %}{{ post.file_upload.url }}{% endif %}"
+      />
+    </div>
 
-  <div class="form-group">
-    <label for="file_upload">File upload</label>
-    <input
-      type="file"
-      class="form-control-file"
-      id="file_upload"
-      name="file_upload"
-      value="{% if post.file_upload %}{{ post.file_upload.url }}{% endif %}"
-    />
-  </div>
+    <input type="submit" value={% if "/create/" in request.path %}"Create post"
+    {%else %} "Edit post" {% endif %} class="btn btn-primary bg-blue-300
+    rounded" />
+  </form>
+</div>
 
-  <input type="submit" value={% if "/create/" in request.path %}"Create post"
-  {%else %} "Edit post" {% endif %} class="btn btn-primary bg-blue-300 rounded"
-  />
-</form>
+  {% endblock %} {% block scripts %}
 
-{% endblock %}
+  <script>
+    const editor = new toastui.Editor({
+      el: document.querySelector('#contents'),  // 마크다운 프리뷰 스타일 (tab || vertical) 
+      height: '600px',
+      initialEditType: 'markdown',
+      previewStyle: 'vertical'
+    });
+
+    const submit = document.querySelector("input[type='submit']")
+    const content = document.querySelector('.content')
+    submit.addEventListener('click', () => {
+      editorcontent = editor.getMarkdown();
+      content.value = editorcontent;
+    })
+
+    
+    
+    
+  </script>
+  {% endblock scripts %}
+</div>
