@@ -8,7 +8,7 @@
 로그인하고 세션유지시간 1시간
 시크릿키 가리기
 
-[글생성, 글수정]
+글을 생성할때 이미지부분
 
 댓글, 대댓글
 좋아요 글검색
@@ -21,12 +21,25 @@
 
 이미지나 파일을 저장할때 uuid로 바꿔서 저장
 
-
-
 조회수: {{ post.views | add:-1 }}
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         form.instance.views -= 1
         return super().form_valid(form)
+
+uieditor 적용부분
+script파일 나누기
+
+이미지를 저장하는 부분
+ if uploaded_file:
+            # 파일을 저장합니다.
+            file_name = os.path.join('media/blog/images/', uploaded_file.name)
+            with open(file_name, 'wb') as f:
+                for chunk in uploaded_file.chunks():
+                    f.write(chunk)
+
+            # 파일의 URL을 생성합니다.
+            file_url = settings.MEDIA_URL + file_name
+이미지이름이 곂치면 기존의 이미지가나옴 >> uuid사용하여 랜덤이미지이름
 -->

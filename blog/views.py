@@ -2,13 +2,17 @@ from typing import Any
 from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, HttpResponse
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from django.core.exceptions import PermissionDenied
 
+from django.conf import settings
 from .models import Post
 from .forms import PostForm
 from django.urls import reverse_lazy
+import os
+from uuid import uuid4
 
 
 class PostListView(ListView):
@@ -90,3 +94,39 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
+
+
+def fileUpload(request):
+    if request.method == 'POST' or request.method == 'GET':
+        # 업로드된 파일을 가져옵니다.
+        uploaded_file = request.FILES.get('images')
+        uuid = str(uuid4())
+        if uploaded_file:
+            # 파일 확장자를 추출합니다.
+            file_extension = uploaded_file.name.split('.')[-1]
+
+            # 파일을 저장합니다.
+            file_name = os.path.join(
+                'media/blog/images/', f'{uuid}.{file_extension}')
+            with open(file_name, 'wb') as f:
+                for chunk in uploaded_file.chunks():
+                    f.write(chunk)
+            print(file_name)
+            # 파일의 URL을 생성합니다.
+            file_url = settings.MEDIA_URL + os.path.join(
+                'blog/images/', f'{uuid}.{file_extension}')
+            print(file_url)
+            return JsonResponse({
+                'success': True,
+                'url': file_url,
+            })
+        else:
+            return JsonResponse({
+                'success': False,
+                'error': '이미지를 찾을 수 없습니다.',
+            })
+    else:
+        return JsonResponse({
+            'success': False,
+            'error': '비정상적인 접근입니다.',
+        })

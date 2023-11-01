@@ -2,7 +2,7 @@
 {% block title%}글목록{%endblock title %}
 
 <hr />
-{% block content %}
+{% block content %}{% load markdown_deux_tags %}
 <div class="max-w-7xl mx-auto">
     <p class="pl-4 pb-2 text-lg sm:text-3xl font-bold">{% if order.popular %}{{ order.popular }}{% else %}전체글{% endif %}</p>
     <div class="ml-5 mr-5 mb-4 border-2 border-zinc-700"></div>
