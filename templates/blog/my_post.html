@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load static %} {% block title %}글 목록{% endblock title %}
+{% extends "base.html" %}{% load static %} {% block title %}{% if user.nickname %}{{ user.nickname }}{% else %}{{ user.username }}{% endif %} - 블로그{% endblock title %}
 
 <hr />
 {% block content %}

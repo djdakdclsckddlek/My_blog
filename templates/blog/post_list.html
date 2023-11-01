@@ -1,5 +1,5 @@
 {% extends "base.html" %}{% load static %} <br />
-{% block title%}글목록{%endblock title %}
+{% block title%}{% if order.popular %}{{ order.popular }}{% else %}글목록{% endif %}{%endblock title %}
 
 <hr />
 {% block content %}{% load markdown_deux_tags %}

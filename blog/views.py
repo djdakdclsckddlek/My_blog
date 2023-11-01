@@ -33,6 +33,7 @@ class PostListUserView(ListView):
         return context
 
     # 이름으로 Post목록을 필터링
+
     def get_queryset(self):
 
         return Post.objects.filter(author__username=self.kwargs['blog']).order_by('-created_at')

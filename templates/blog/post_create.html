@@ -8,8 +8,7 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
 />
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
-{% if "/create/" in request.path %}
-<h1 class="">글쓰기{% else %}글 수정{% endif %}</h1>
+
 <div class="pl-4 pr-4">
 <form action="" method="post" enctype="multipart/form-data">
   {% csrf_token %}
@@ -24,19 +23,6 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
     value="{% if post.title %}{{ post.title }}{% endif %}"
     placeholder="제목을 입력하세요"
     />
-  </div>
-  
-      
-      <div class="bg-slate-100 rounded mt-10" id="contents">
-        {% if post.content %}{{ post.content|markdown }}{% else %}{% endif %}
-      </div>
-    <div class="form-group">
-      
-      <textarea class="content form-control hidden" id="content" name="content" rows="10">
-</textarea
-      >
-    </div>
-
     <div class="form-group">
       <label for="thumbnail">Thumbnail</label>
       <input
@@ -48,7 +34,6 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
         value="{% if post.thumbnail %}{{ post.thumbnail.url }}{% endif %}"
       />
     </div>
-
     <div class="form-group">
       <label for="file_upload">File upload</label>
       <input
@@ -59,7 +44,15 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
         value="{% if post.file_upload %}{{ post.file_upload.url }}{% endif %}"
       />
     </div>
-
+  </div>
+      <div class="bg-slate-100 rounded mt-10" id="contents">
+        {% if post.content %}{{ post.content|markdown }}{% else %}{% endif %}
+      </div>
+    <div class="form-group">
+      <textarea class="content form-control hidden" id="content" name="content" rows="10">
+</textarea
+      >
+    </div>
     <input type="submit" value={% if "/create/" in request.path %}"Create post"
     {%else %} "Edit post" {% endif %} class="btn btn-primary bg-blue-300
     rounded" />
@@ -71,15 +64,15 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
   <script>
     const csrftoken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
     const editor = new toastui.Editor({
-      el: document.querySelector('#contents'),  // 마크다운 프리뷰 스타일 (tab || vertical) 
-      height: '600px',
-      initialEditType: 'wysiwyg',
+      el: document.querySelector('#contents'),
+      height: '550px',
+      initialEditType: 'markdown',
       previewStyle: 'vertical',
-      hooks : {
-        addImageBlobHook: (blob, callback) => uploadImages(blob, callback)
+      hooks: {
+        addImageBlobHook: (blob, callback) => uploadImages(blob, callback),
       },
     });
-
+    
     const uploadImages = (blob, callback) => {
       let xhr = new XMLHttpRequest();
       
