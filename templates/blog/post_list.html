@@ -24,7 +24,7 @@
                 <a href="{% url 'blog:post_detail' post.pk %}">
                     <p class="title text-[#ECECEC] text-xl font-bold">{{ post.title }}</p>
                     <div class="post_detail text-[#ECECEC] pt-1 text-sm overflow-hidden h-[{% if post.thumbnail %}8rem{% else %}20rem{% endif %}]">
-                        {% if post.thumbnail %}<p>{{ post.content | truncatechars:150 }}</p>
+                        {% if post.thumbnail %}<p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:150 }}</p>
                         {% else %} <p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:350 }}</p>{% endif %}
                         <script>
                             // 이미지 태그를 제거하는 함수.
