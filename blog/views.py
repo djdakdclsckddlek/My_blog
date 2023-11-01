@@ -102,17 +102,17 @@ def fileUpload(request):
         uploaded_file = request.FILES.get('images')
         uuid = str(uuid4())
         if uploaded_file:
-            # 파일 확장자를 추출합니다.
+            # 파일 확장자를 추출합니다 (xxx.png)
             file_extension = uploaded_file.name.split('.')[-1]
 
-            # 파일을 저장합니다.
+            # 파일을 저장합니다. (---uuid----.png)
             file_name = os.path.join(
                 'media/blog/images/', f'{uuid}.{file_extension}')
             with open(file_name, 'wb') as f:
                 for chunk in uploaded_file.chunks():
                     f.write(chunk)
             print(file_name)
-            # 파일의 URL을 생성합니다.
+            # 파일의 URL을 생성합니다. (---uuid----.png)
             file_url = settings.MEDIA_URL + os.path.join(
                 'blog/images/', f'{uuid}.{file_extension}')
             print(file_url)

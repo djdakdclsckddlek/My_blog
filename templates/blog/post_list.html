@@ -25,7 +25,17 @@
                     <p class="title text-[#ECECEC] text-xl font-bold">{{ post.title }}</p>
                     <div class="post_detail text-[#ECECEC] pt-1 text-sm overflow-hidden h-[{% if post.thumbnail %}8rem{% else %}20rem{% endif %}]">
                         {% if post.thumbnail %}<p>{{ post.content | truncatechars:150 }}</p>
-                        {% else %} <p>{{ post.content | truncatechars:350 }}</p>{% endif %}
+                        {% else %} <p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:350 }}</p>{% endif %}
+                        <script>
+                            // 이미지 태그를 제거하는 함수.
+                            function removeImageTags(text, postId) {
+                                // 이미지 태그를 제거하는 정규 표현식.
+                                const regex = /!\[[^\]]*\]\([^\)]*\)/g;
+                                const cleanedText = text.replace(regex, '');  // 이미지 태그를 제거
+                                document.getElementById(`post_detail_text_${postId}`).textContent = cleanedText;  // 업데이트된 텍스트로 대체
+                            }
+                            removeImageTags(`{{ post.content|safe }}`, {{ post.pk }});
+                        </script>
                     </div>
                 </a>
                 <div class="post_subinfo ">
@@ -59,3 +69,4 @@
 </div>
 </div>
 {% endblock content %}
+
