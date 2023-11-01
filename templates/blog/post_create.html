@@ -73,7 +73,7 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
     const editor = new toastui.Editor({
       el: document.querySelector('#contents'),  // 마크다운 프리뷰 스타일 (tab || vertical) 
       height: '600px',
-      initialEditType: 'markdown',
+      initialEditType: 'wysiwyg',
       previewStyle: 'vertical',
       hooks : {
         addImageBlobHook: (blob, callback) => uploadImages(blob, callback)
