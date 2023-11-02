@@ -85,8 +85,8 @@
       <div class="comment_date text-[12px] text-gray-500">{{ comment.updated_at|date:"Y년 m월 d일 H:i" }}</div>
     </div>
   </div>
-  <textarea class="bg-gray-300 resize-none mt-2 outline-0 readonly">{{ comment.comment }}</textarea>
-  
+  <textarea class="w-full bg-gray-300 resize-y mt-2 outline-0 readonly">{{ comment.comment }}</textarea>
+  <input type="button" value="n개의 답글">
   {% endif %}
 
 
@@ -95,9 +95,19 @@
 
       {% for recomment in comments reversed %}
       {% if recomment.recomment == comment %}
-        <div class="pl-4">
-          <div>대댓글: {{ recomment.comment }}</div>
+    <div class="recomments bg-gray-400 ml-6 mt-1 pl-2 rounded">
+      <div class="pt-2 pr-2 pb-1 h-10 flex flex-row">
+        <a class="profile flex flex-row" href="{% url 'blog:post_user' recomment.author.username %}">
+          <img class="h-7 w-7 rounded-full" src="{% if recomment.author.profile_img %}{{ recomment.author.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}" />
+        </a>
+        <div class="pl-2 flex flex-col">
+          <a href="{% url 'blog:post_user' recomment.author.username %}" class=" text-[12px] text-[#757575]"><b>
+            {% if recomment.author.nickname %}{{recomment.author.nickname }}{% else %}{{ recomment.author.username }}{% endif %}</b></a>
+          <div class="comment_date text-[12px] text-gray-500">{{ recomment.updated_at|date:"Y년 m월 d일 H:i" }}</div>
         </div>
+      </div>
+      <textarea class="w-full bg-gray-400 resize-y mt-2 pr-2 outline-0 readonly" rows="1">{{ recomment.comment }}</textarea>
+    </div>
       {% endif %}
     {% endfor %}
 
