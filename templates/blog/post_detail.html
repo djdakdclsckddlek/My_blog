@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}글 내용{% endblock title %} <br />
 {%block content %} {% load markdown_deux_tags %}{% load static %}
 <div
-  class="flex min-h-full flex-col justify-center align-center px-6 md:px-[10%] w-full"
+  class="flex min-h-full flex-col justify-center align-center px-6 sm:mx-auto sm:w-full sm:max-w-3xl"
 >
   <div class="title-menu flex justify-between">
     <p class="text-4xl font-bold">{{ object.title }}</p>
@@ -25,7 +25,7 @@
   {% endif %}
 </div>
 {% if object.file_upload %}
-<p>첨부파일: {{ object.file_upload.name }}({{ object.file_upload.size }}KB) <a href="{{ object.file_upload.url }}" target="_blank">다운로드</a></p>
+<p>첨부파일: {{ object.file_upload.name }}({{ object.file_upload.size }}B) <a href="{{ object.file_upload.url }}" target="_blank">다운로드</a></p>
 {% else %}{% endif %}
   {% if object.thumbnail %}
     <img class="w-fit mx-auto mt-4" src="{{ object.thumbnail.url }}"></img>
@@ -34,6 +34,11 @@
   <div class="post-content xl:w-full leading-relaxed">
       {{ object.content|markdown }}
     </div>
+    
+    
+    
+    <h2 class="text-3xl">댓글</h2>
+    
     {% for comment in comments reversed %}
   <div>
     {% if not comment.recomment %}

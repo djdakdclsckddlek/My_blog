@@ -7,10 +7,20 @@ rel="stylesheet"
 href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
 />
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<style>
+  .post_save {
+    transition: all 0.2s ease;
+  }
 
+  .post_save:hover {
+    transform: scale(1.1);
+    border: 1px solid #000;
+    
+  }
+</style>
 
 <div class="pl-4 pr-4">
-<form action="" method="post" enctype="multipart/form-data">
+  <form action="" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   
   <div class="form-group">
@@ -54,10 +64,11 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
       >
     </div>
     <input
-        type="submit"
+        type="button"
         value={% if "/create/" in request.path %}"Create post"{%else%}"Edit post"{%endif%}
-        class="btn btn-primary bg-blue-300 rounded fixed bottom-0 left-0 right-0 cursor-pointer"
+        class="post_save btn btn-primary bg-blue-300 hover:bg-blue-500 t rounded fixed bottom-0 left-0 right-0 cursor-pointer"
       />
+      <input type="submit" class="submit hidden">
   </form>
 </div>
 
@@ -99,11 +110,13 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
     };
 
 
-    const submit = document.querySelector("input[type='submit']")
+    const submit = document.querySelector('.submit')
     const content = document.querySelector('.content')
-    submit.addEventListener('click', () => {
+    const postsave = document.querySelector('.post_save')
+    postsave.addEventListener('click', () => {
       editorcontent = editor.getMarkdown();
       content.value = editorcontent;
+      submit.click()
     })
 
     
