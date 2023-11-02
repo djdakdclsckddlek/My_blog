@@ -46,17 +46,43 @@
             {% else %}
             <a href="{% url 'accounts:login' %}"
             {% endif %}
-              class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-1 py-2 text-sm font-medium"
               aria-current="page">내블로그</a>
             <a href="{% url 'blog:post_list_popular' %}"
-              class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium">인기글</a>
+              class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-1 py-2 text-sm font-medium">인기글</a>
             <a href="{% url 'blog:post_create' %}"
-              class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium">글쓰기</a>
+              class="text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-1 py-2 text-sm font-medium">글쓰기</a>
 
           </div>
         </div>
       </div>
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        
+
+
+        <div class='max-w-md mx-auto sm:block hidden'>
+          <div class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
+              <div class="grid place-items-center h-full w-12 text-gray-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+              </div>
+              <form action="" method="GET">
+              <input
+              class="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
+              type="text"
+              id="search"
+              name="q"
+              value="{{ request.GET.q }}"
+              placeholder="검색" /> 
+              <input class="hidden" type="submit" value="검색" />
+            </form>
+          </div>
+      </div>
+
+
+
+
         {% if user.username %}
         <a href="{% url 'accounts:logout' %}"
           class="logout sm:block sm:ml-6 hidden bg-red-800 text-gray-300 hover:bg-red-500 hover:text-white rounded-md px-3 py-2 text-sm font-medium">로그아웃</a>
@@ -64,16 +90,6 @@
         <a href="{% url 'accounts:login' %}"
           class="sm:block sm:ml-6 hidden bg-blue-800 text-gray-300 hover:bg-blue-500 hover:text-white rounded-md px-3 py-2 text-sm font-medium">로그인/회원가입</a>
         {% endif %}
-        <!-- 알림 모양
-          <button type="button"
-          class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-          <span class="absolute -inset-1.5"></span>
-          <span class="sr-only">View notifications</span>
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-          </svg> -->
         </button>
 
 

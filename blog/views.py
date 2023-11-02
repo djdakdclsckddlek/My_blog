@@ -2,6 +2,7 @@ from typing import Any
 from accounts.models import User
 from .models import Post, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
@@ -20,6 +21,14 @@ class PostListView(ListView):
 
     model = Post
     template_name = 'blog/post_list.html'
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        q = self.request.GET.get('q', '')
+        if q:
+            qs = qs.filter(Q(title__icontains=q) | Q(content__icontains=q) | Q(author__nickname__icontains=q))
+        return qs
+    
 
 
 class PostListUserView(ListView):
