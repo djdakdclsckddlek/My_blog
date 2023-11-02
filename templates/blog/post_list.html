@@ -55,7 +55,7 @@
             <hr class="border-[#757575]">
             <div class="post_footer pt-1 pl-2 pr-2 pb-1 h-10 flex flex-row justify-between">
                 <a class="profile flex flex-row" href="{% url "blog:post_user" post.author.username %}">
-                    <img class="h-7 w-7 rounded-full" src="{% if post.author.profile_img %}{{ post.author.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}" />
+                    <img class="h-7 w-7 rounded-full" src="{% if post.author.profile_img %}{{ post.author.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}" />
                     <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b class="text-[#ECECEC]">
                         {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
                 </a>

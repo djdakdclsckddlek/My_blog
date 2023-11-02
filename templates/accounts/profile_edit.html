@@ -17,14 +17,14 @@
   {% csrf_token %}
   <div class="flex min-h-full flex-col justify-center px-6 py-2 lg:px-8">
     <div class="sm:mx-auto sm:w-full md:max-w-lg">
-      <img class="mx-auto h-[100px] w-auto" src="{% static 'PROFILE.png' %}" />
+      <img class="mx-auto h-[100px] w-auto" src="{% static 'img/PROFILE.png' %}" />
     </div>
 
     <div class="flex flex-col mx-auto w-full max-w-lg">
       <p class="pt-10">
         <img
           class="h-40 w-40 m-auto rounded-full profile_img hover:pointer"
-          src="{% if profile_user.profile_img %}{{ profile_user.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}"
+          src="{% if profile_user.profile_img %}{{ profile_user.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}"
           width="200px"
           alt="profile_img"
         />

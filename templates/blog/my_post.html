@@ -13,7 +13,7 @@
 <div class="max-w-7xl mx-auto">
     <div class="user_profile flex flex-col sm:flex-row pl-6">
         <img class=" w-20 h-20 sm:h-32 sm:w-32 rounded-full flex-none"
-            src="{% if user.profile_img %}{{ user.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}"
+            src="{% if user.profile_img %}{{ user.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}"
             alt="profile_img">
         <div class="flex flex-col pr-6 flex-grow">
             <h2 class="sm:pl-4 pt-2 sm:pt-6 text-2xl sm:text-3xl font-bold">{% if user.nickname %}{{ user.nickname }}{% else %}{{ user.username }}{% endif %}님의 블로그</h2>
@@ -66,7 +66,7 @@
                     {% if post.author.profile_img %}
                     <img class="h-7 w-7 rounded-full" src="{{ post.author.profile_img.url }}" />
                     {% else %}
-                    <img class="h-7 w-7 rounded-full" src="{% static 'profile-default.jpg' %}" />
+                    <img class="h-7 w-7 rounded-full" src="{% static 'img/profile-default.jpg' %}" />
                     {% endif %}
                     {% if post.author.nickname %}
                     <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b class="text-[#ECECEC]">

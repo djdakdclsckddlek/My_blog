@@ -35,7 +35,7 @@
       </div>
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <div class="flex flex-shrink-0 items-center">
-          <a href="{% url "blog:post_list" %}"><img class="h-8 w-auto" src="{% static "LOGO1.png" %}"
+          <a href="{% url "blog:post_list" %}"><img class="h-8 w-auto" src="{% static "img/LOGO1.png" %}"
             alt="Blog" /></a>
         </div>
         <div class="hidden sm:ml-6 sm:block">
@@ -102,7 +102,7 @@
               <span class="sr-only">Open user menu</span>
 
               <img class="h-8 w-8 rounded-full" {% if user.profile_img %} src="{{ user.profile_img.url }}" {% else %}
-                src="{% static 'profile-default.jpg' %}" {% endif %} alt="profile" />
+                src="{% static 'img/profile-default.jpg' %}" {% endif %} alt="profile" />
             </button>
           </div>
 

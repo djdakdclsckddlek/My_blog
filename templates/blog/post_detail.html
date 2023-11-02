@@ -1,5 +1,14 @@
 {% extends "base.html" %} {% block title %}글 내용{% endblock title %} <br />
 {%block content %} {% load markdown_deux_tags %}{% load static %}
+
+<style>
+  .textarea {
+      resize: none;
+      overflow: hidden;
+      outline: none;
+      height:50px;
+    }
+</style>
 <div
   class="flex min-h-full flex-col justify-center align-center px-6 sm:mx-auto sm:w-full sm:max-w-3xl"
 >
@@ -14,7 +23,7 @@
   </div>
     <div class="post_footer pt-2 pr-2 pb-1 h-10 flex flex-row justify-between">
     <a class="profile flex flex-row" href="{% url 'blog:post_user' post.author.username %}">
-      <img class="h-7 w-7 rounded-full" src="{% if post.author.profile_img %}{{ post.author.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}" />
+      <img class="h-7 w-7 rounded-full" src="{% if post.author.profile_img %}{{ post.author.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}" />
       <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b>
           {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
   </a>
@@ -34,20 +43,65 @@
   <div class="post-content xl:w-full leading-relaxed">
       {{ object.content|markdown }}
     </div>
-    
-    
-    
-    <h2 class="text-3xl">댓글</h2>
-    
+
+    <div class="user_profile flex flex-col sm:flex-row mt-36">
+      <img class=" w-16 h-16 sm:h-20 sm:w-20 rounded-full flex-none"
+          src="{% if post.author.profile_img %}{{ post.author.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}"
+          alt="profile_img">
+      <div class="flex flex-col pr-6 flex-grow">
+          <a href="{% url "blog:post_user" post.author.username %}" class="sm:pl-4 text-2xl sm:text-3xl font-bold hover:underline">{% if post.author.nickname %}{{ post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</a>
+          <div class="w-full  pt-2">
+          <textarea class="textarea bg-gray-300 resize-none overflow-hidden w-full sm:pl-4 text-md sm:text-lg" readonly>{% if post.author.introduce %}{{ post.author.introduce }}{% else %}{% endif %}</textarea>
+          </div>
+      </div>
+    </div>
+    <div class=" mb-4 border-[1px] border-zinc-700"></div>
+
+    <h2 class="text-3xl">{{ post.comments_count }}개의 댓글</h2>
+    <form method="post" action="{% url 'blog:post_detail' post.pk %}">
+      {% csrf_token %}
+      <textarea 
+      name="comment" 
+      maxlength="1000" 
+      required 
+      id="id_comment" 
+      class="bg-gray-400 rounded m-auto mt-4 pl-2 pb-2 text-lg font-medium w-full resize-y" 
+      rows="3">
+    </textarea>
+      <button type="submit" class="sm:ml-6 bg-green-600 text-gray-300 hover:bg-green-400 hover:text-white rounded-md px-4 py-3 my-1 text-sm font-medium">댓글 작성</button>
+    </form>
     {% for comment in comments reversed %}
   <div>
     {% if not comment.recomment %}
-      <div>댓글: {{ comment.comment }}</div>
-      {% endif %}
-      {% if comment.recomment %}
       
-      <div>대댓글: {{ comment.comment }}</div>
-    {% endif %}
+    
+    <div class="pt-2 pr-2 pb-1 h-10 flex flex-row ">
+    <a class="profile flex flex-row" href="{% url 'blog:post_user' comment.author.username %}">
+      <img class="h-7 w-7 rounded-full" src="{% if comment.author.profile_img %}{{ comment.author.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}" />
+    </a>
+    <div class="pl-2 flex flex-col">
+      <a href="{% url 'blog:post_user' comment.author.username %}" class=" text-[12px] text-[#757575]"><b>
+        {% if comment.author.nickname %}{{comment.author.nickname }}{% else %}{{ comment.author.username }}{% endif %}</b></a>
+      <div class="comment_date text-[12px] text-gray-500">{{ comment.updated_at|date:"Y년 m월 d일 H:i" }}</div>
+    </div>
+  </div>
+  <textarea class="bg-gray-300 resize-none mt-2 outline-0 readonly">{{ comment.comment }}</textarea>
+  
+  {% endif %}
+
+
+
+
+
+      {% for recomment in comments reversed %}
+      {% if recomment.recomment == comment %}
+        <div class="pl-4">
+          <div>대댓글: {{ recomment.comment }}</div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+
     {% if not comment.recomment %}
       <form method="post" action="{% url 'blog:post_detail' post.pk %}">
         {% csrf_token %}
@@ -56,14 +110,11 @@
         <button type="submit">대댓글 작성</button>
       </form>
       {% endif %}
+
   </div>
 {% endfor %}
-<h3>새 댓글 작성</h3>
-<form method="post" action="{% url 'blog:post_detail' post.pk %}">
-  {% csrf_token %}
-  {{ comment_form.as_p }}
-  <button type="submit">댓글 작성</button>
-</form>
+
+
   </div>
 </div>
 

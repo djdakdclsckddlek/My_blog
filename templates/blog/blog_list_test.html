@@ -53,7 +53,7 @@ div, div 320,376 a(썸네일 이미지) 없다면 생략 div(글제목, 내용, 
                     {% if post.author.profile_img %}
                     <img class="h-7 w-7 rounded-full" src="{{ post.author.profile_img.url }}" />
                     {% else %}
-                    <img class="h-7 w-7 rounded-full" src="{% static 'profile-default.jpg' %}" />
+                    <img class="h-7 w-7 rounded-full" src="{% static 'img/profile-default.jpg' %}" />
                     {% endif %}
                     {% if post.author.nickname %}
                     <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b class="text-[#ECECEC]">
