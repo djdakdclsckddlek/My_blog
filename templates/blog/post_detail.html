@@ -1,18 +1,37 @@
 {% extends "base.html" %} {% block title %}글 내용{% endblock title %} <br />
-{%block content %} {% load markdown_deux_tags %}
+{%block content %} {% load markdown_deux_tags %}{% load static %}
 <div
-  class="flex min-h-full flex-col justify-center align-center px-6 py-8 lg:px-8"
+  class="flex min-h-full flex-col justify-center align-center px-6 lg:px-8"
 >
-  <div class="mt-4 sm:mx-auto sm:w-full sm:max-w-3xl">
-    <p>제목{{ object.title }}</p>
-    {% if object.author.nickname %}
-    <p>글쓴이:{{ object.author.nickname }}</p>
-    {% else %}
-    <p>글쓴이:{{ object.author.username }}</p>
+  <div class="title-menu flex justify-between">
+    <p class="text-4xl font-bold">{{ object.title }}</p>
+    {% if post.author.username == request.user or request.user.is_superuser %}
+  <div class="actions flex flex-row">
+    <a href="{% url "blog:post_update" post.pk %}" class="justify:flex-end sm:ml-6 bg-green-800 text-gray-300 hover:bg-green-500 hover:text-white rounded-md px-3  pt-1 my-1 text-sm font-medium">글 수정</a>
+    <a href="#" class="flex-end sm:ml-6 bg-red-600 text-gray-300 hover:bg-red-400 hover:text-white rounded-md px-3  pt-1 my-1 text-sm font-medium" id="delete-post-button">글 삭제</a>
+  </div>
     {% endif %}
-    <p>썸네일{{ object.thumbnail }}</p>
-    <p>파일{{ object.file_upload }}</p>
-    <div class="post-content xl:w-full leading-relaxed">
+  </div>
+    <div class="post_footer pt-2 pr-2 pb-1 h-10 flex flex-row justify-between">
+    <a class="profile flex flex-row" href="{% url 'blog:post_user' post.author.username %}">
+      <img class="h-7 w-7 rounded-full" src="{% if post.author.profile_img %}{{ post.author.profile_img.url }}{% else %}{% static 'profile-default.jpg' %}{% endif %}" />
+      <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b>
+          {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
+  </a>
+  {% if post.updated_at %}
+  <span class="post_date text-[12px] text-gray-500">{{ post.updated_at }}</span>
+  {% else %}
+  <span class="post_date text-[12px]">{{ post.created_at }}</span>
+  {% endif %}
+</div>
+{% if object.file_upload %}
+<p>첨부파일: {{ object.file_upload.name }}({{ object.file_upload.size }}KB) <a href="{{ object.file_upload.url }}" target="_blank">다운로드</a></p>
+{% else %}{% endif %}
+  {% if object.thumbnail %}
+    <img class="w-fit mx-auto mt-4" src="{{ object.thumbnail.url }}"></img>
+  {% else %}{% endif %}
+
+  <div class="post-content xl:w-full leading-relaxed">
       {{ object.content|markdown }}
     </div>
   </div>
@@ -20,13 +39,14 @@
 
 {% endblock content %} {% block scripts %}
 <script>
-  const h1s = document.querySelectorAll("h1");
-  const h2s = document.querySelectorAll("h2");
-  const h3s = document.querySelectorAll("h3");
-  const h4s = document.querySelectorAll("h4");
-  const h5s = document.querySelectorAll("h5");
-  const ols = document.querySelectorAll("ol");
-  const ps = document.querySelectorAll("p");
+  const h1s = document.querySelectorAll(".post-content h1");
+  const h2s = document.querySelectorAll(".post-content h2");
+  const h3s = document.querySelectorAll(".post-content h3");
+  const h4s = document.querySelectorAll(".post-content h4");
+  const h5s = document.querySelectorAll(".post-content h5");
+  const ols = document.querySelectorAll(".post-content ol");
+  const ps = document.querySelectorAll(".post-content p");
+  const imgs = document.querySelectorAll(".post-content img");
 
   h1s.forEach((h1) => {
     h1.classList.add("text-5xl");
@@ -60,5 +80,16 @@
   ps.forEach((p) => {
     p.classList.add("mt-4");
   });
+  imgs.forEach((img) => {
+    img.classList.add("w-fit");
+    img.classList.add("mx-auto");
+    img.classList.add("mt-4");
+  });
+
+  document.getElementById("delete-post-button").addEventListener("click", function() {
+    if (confirm("글을 삭제하시겠습니까?")) {
+        window.location.href = "{% url 'blog:post_delete' post.pk %}";
+    }
+});
 </script>
 {% endblock scripts %}

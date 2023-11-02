@@ -3,9 +3,10 @@ from accounts.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, HttpResponse
-from django.views.generic import CreateView, UpdateView, DetailView, ListView
+from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
+from django.views.generic import CreateView, UpdateView, DetailView, ListView, DeleteView
 from django.core.exceptions import PermissionDenied
+from django.views import View
 
 from django.conf import settings
 from .models import Post
@@ -38,6 +39,19 @@ class PostListUserView(ListView):
 
         return Post.objects.filter(author__username=self.kwargs['blog']).order_by('-created_at')
 
+
+class PostDeleteView(LoginRequiredMixin, View):
+    
+    def get(self, request, pk):
+        
+        post = Post.objects.get(pk=pk)
+        
+        if post.author != request.user and not request.user.is_superuser:
+            return redirect('blog:post_detail', pk)
+        post.delete()
+        
+        return redirect('blog:post_list')
+    
 
 class PostPopularView(ListView):
 
