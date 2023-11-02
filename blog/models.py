@@ -24,7 +24,11 @@ class Post(TimestampedModel):
     def get_file_ext(self):
         return self.get_file_name().split('.')[-1]
 
-
-class Content_image(models.Model):
-    content_image = models.ImageField(upload_to='blog/images/', blank=True)
-    post_id = models.ForeignKey('Post', on_delete=models.CASCADE)
+class Comment(TimestampedModel):
+    author = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    #댓글
+    comment = models.CharField(max_length=1000)
+    # 대댓글 
+    recomment = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='recomments')
+    

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post  # Comment, Tag
+from .models import Post, Comment  # Tag
 
 
 class PostForm(forms.ModelForm):
@@ -7,5 +7,8 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'thumbnail', 'file_upload']
 
-    # thumbnail = forms.ImageField(required=False)
-    # file_upload = forms.FileField(required=False)
+class CommentForm(forms.ModelForm):
+    recomment = forms.IntegerField(widget=forms.HiddenInput, required=False)
+    class Meta:
+        model = Comment
+        fields = ['comment']

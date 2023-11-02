@@ -75,4 +75,6 @@ script파일 나누기
             # 파일의 URL을 생성합니다.
             file_url = settings.MEDIA_URL + file_name
 이미지이름이 곂치면 기존의 이미지가나옴 >> uuid사용하여 랜덤이미지이름
+
+contentimage 모델 삭제
 -->

@@ -17,13 +17,13 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
     <label for="title"></label>
     <input
     type="text"
-    class="form-control text-6xl bg-gray-300 font-bold"
+    class="form-control text-6xl bg-gray-300 font-bold w-full"
     id="title"
     name="title"
     value="{% if post.title %}{{ post.title }}{% endif %}"
     placeholder="제목을 입력하세요"
     />
-    <div class="form-group">
+    <div class="form-group pt-1">
       <label for="thumbnail">Thumbnail</label>
       <input
         type="file"
@@ -45,7 +45,7 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
       />
     </div>
   </div>
-      <div class="bg-slate-100 rounded mt-10" id="contents">
+      <div class="bg-slate-100 rounded mt-2 mb-5" id="contents">
         {% if post.content %}{{ post.content|markdown }}{% else %}{% endif %}
       </div>
     <div class="form-group">
@@ -53,9 +53,11 @@ href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
 </textarea
       >
     </div>
-    <input type="submit" value={% if "/create/" in request.path %}"Create post"
-    {%else %} "Edit post" {% endif %} class="btn btn-primary bg-blue-300
-    rounded" />
+    <input
+        type="submit"
+        value={% if "/create/" in request.path %}"Create post"{%else%}"Edit post"{%endif%}
+        class="btn btn-primary bg-blue-300 rounded fixed bottom-0 left-0 right-0 cursor-pointer"
+      />
   </form>
 </div>
 

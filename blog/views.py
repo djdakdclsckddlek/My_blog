@@ -1,5 +1,6 @@
 from typing import Any
 from accounts.models import User
+from .models import Post, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import JsonResponse
@@ -9,8 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.views import View
 
 from django.conf import settings
-from .models import Post
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 from django.urls import reverse_lazy
 import os
 from uuid import uuid4
@@ -76,7 +76,35 @@ class PostDetailView(DetailView):
         post.save()
         return post
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        #Comment 모델에서 post 필드가 현재 포스트와 같은 댓글들을 가져와 comments 변수에 할당
+        post = self.get_object()
+        comments = Comment.objects.filter(post=post)
 
+        context['comments'] = comments
+        context['comment_form'] = CommentForm()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        comment_form = CommentForm(request.POST)
+        
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            recomment_id = comment_form.cleaned_data.get('recomment')
+            
+            if recomment_id:
+                recomment_text = Comment.objects.get(id=recomment_id)
+                comment.recomment = recomment_text
+            
+            comment.author = self.request.user
+            comment.save()
+            return self.get(self, request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
+        
 class PostCreateView(LoginRequiredMixin, CreateView):
 
     template_name = 'blog/post_create.html'

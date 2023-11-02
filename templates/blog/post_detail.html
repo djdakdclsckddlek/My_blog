@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}글 내용{% endblock title %} <br />
 {%block content %} {% load markdown_deux_tags %}{% load static %}
 <div
-  class="flex min-h-full flex-col justify-center align-center px-6 lg:px-8"
+  class="flex min-h-full flex-col justify-center align-center px-6 lg:px-8 max-w-5xl"
 >
   <div class="title-menu flex justify-between">
     <p class="text-4xl font-bold">{{ object.title }}</p>
@@ -34,8 +34,34 @@
   <div class="post-content xl:w-full leading-relaxed">
       {{ object.content|markdown }}
     </div>
+    {% for comment in comments reversed %}
+  <div>
+    {% if not comment.recomment %}
+      <div>댓글: {{ comment.comment }}</div>
+      {% endif %}
+      {% if comment.recomment %}
+      
+      <div>대댓글: {{ comment.comment }}</div>
+    {% endif %}
+    {% if not comment.recomment %}
+      <form method="post" action="{% url 'blog:post_detail' post.pk %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="hidden" name="recomment" value="{{ comment.id }}">
+        <button type="submit">대댓글 작성</button>
+      </form>
+      {% endif %}
+  </div>
+{% endfor %}
+<h3>새 댓글 작성</h3>
+<form method="post" action="{% url 'blog:post_detail' post.pk %}">
+  {% csrf_token %}
+  {{ comment_form.as_p }}
+  <button type="submit">댓글 작성</button>
+</form>
   </div>
 </div>
+
 
 {% endblock content %} {% block scripts %}
 <script>
