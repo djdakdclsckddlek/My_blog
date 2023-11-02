@@ -14,7 +14,8 @@ class Post(TimestampedModel):
     like_count = models.JSONField(default=dict, null=True, blank=True)
     author = models.ForeignKey(
         "accounts.User", on_delete=models.CASCADE, related_name='posts')
-
+    comments_count = models.IntegerField(default=0)
+    
     def __str__(self):
         return f'[{self.pk}]{self.title} by {self.author}'
 
@@ -23,6 +24,10 @@ class Post(TimestampedModel):
 
     def get_file_ext(self):
         return self.get_file_name().split('.')[-1]
+    
+    def update_comments_count(self):
+        self.comments_count = self.comments.count()
+        self.save()
 
 class Comment(TimestampedModel):
     author = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name='comments')

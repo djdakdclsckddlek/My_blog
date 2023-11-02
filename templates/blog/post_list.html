@@ -44,7 +44,7 @@
                     {% else %}
                     <span class="post_date text-[12px]">{{ post.created_at }}</span>
                     {% endif %}
-                    <span class="post_comment text-[12px] text-gray-500">| 0개의 댓글</span>
+                    <span class="post_comment text-[12px] text-gray-500">| {{ post.comments_count }}개의 댓글</span>
                     <div class="post_views">
                         <p class="text-sm text-gray-500">
                             조회수: {{ post.views }}

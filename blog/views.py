@@ -22,6 +22,7 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     
+    #게시물 검색
     def get_queryset(self):
         qs = super().get_queryset()
         q = self.request.GET.get('q', '')
@@ -43,18 +44,20 @@ class PostListUserView(ListView):
         return context
 
     # 이름으로 Post목록을 필터링
-
     def get_queryset(self):
-
-        return Post.objects.filter(author__username=self.kwargs['blog']).order_by('-created_at')
-
+        qs = super().get_queryset()
+        q = self.request.GET.get('q', '')
+        username = self.kwargs['blog']
+        if q:
+            qs = qs.filter(Q(title__icontains=q) | Q(content__icontains=q) | Q(author__nickname__icontains=q))
+        return qs.filter(author__username=username).order_by('-created_at')
 
 class PostDeleteView(LoginRequiredMixin, View):
     
     def get(self, request, pk):
         
         post = Post.objects.get(pk=pk)
-        
+        #글을 쓴 유저거나 관리자만 글을 지울 수 있음.
         if post.author != request.user and not request.user.is_superuser:
             return redirect('blog:post_detail', pk)
         post.delete()
@@ -62,6 +65,7 @@ class PostDeleteView(LoginRequiredMixin, View):
         return redirect('blog:post_list')
     
 
+#인기순으로 글을 정렬
 class PostPopularView(ListView):
 
     model = Post
@@ -90,28 +94,38 @@ class PostDetailView(DetailView):
         
         #Comment 모델에서 post 필드가 현재 포스트와 같은 댓글들을 가져와 comments 변수에 할당
         post = self.get_object()
+        #새로고침이 일어날때마다 뷰가 늘어나 조정
+        post.views -= 1
+        post.save()
         comments = Comment.objects.filter(post=post)
 
         context['comments'] = comments
         context['comment_form'] = CommentForm()
         return context
     
+    #댓글과 대댓글을 달기위해 post요청을 보냄.
     def post(self, request, *args, **kwargs):
         post = self.get_object()
+        #새로고침이 일어날때마다 뷰가 늘어나 조정
+        # 보낼때 한번, redirect될때 한번
+        post.views -= 2
+        
         comment_form = CommentForm(request.POST)
         
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
             recomment_id = comment_form.cleaned_data.get('recomment')
-            
+            #대댓글이 있으면
             if recomment_id:
                 recomment_text = Comment.objects.get(id=recomment_id)
                 comment.recomment = recomment_text
             
             comment.author = self.request.user
             comment.save()
-            return self.get(self, request, *args, **kwargs)
+            post.update_comments_count()
+            post.save()
+            return redirect(request.get_full_path())  # Redirect to the same URL
         return super().get(request, *args, **kwargs)
         
 class PostCreateView(LoginRequiredMixin, CreateView):
