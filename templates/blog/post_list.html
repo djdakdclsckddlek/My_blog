@@ -15,7 +15,7 @@
                 <a href="{% url 'blog:post_detail' post.pk %}">
                     <div class="post_thumbnail">
                         {% if post.thumbnail %}
-                        <img src="{{post.thumbnail.url}}" alt="" class="w-full h-48 rounded" />
+                        <img src="{{post.thumbnail.url}}" alt="" class="w-full h-40 rounded-t-lg object-cover" />
                         {% endif %}
                 </a>
 
@@ -23,15 +23,15 @@
             <div class="post_content post_subinfo flex flex-col pt-1 pl-2 pr-2">
                 <a href="{% url 'blog:post_detail' post.pk %}">
                     <p class="title text-[#ECECEC] text-xl font-bold">{{ post.title }}</p>
-                    <div class="post_detail text-[#ECECEC] pt-1 text-sm overflow-hidden h-[{% if post.thumbnail %}8rem{% else %}20rem{% endif %}]">
-                        {% if post.thumbnail %}<p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:150 }}</p>
-                        {% else %} <p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:350 }}</p>{% endif %}
+                    <div class="post_detail text-[#ECECEC] pt-1 text-sm overflow-hidden h-[{% if post.thumbnail %}5rem{% else %}15rem{% endif %}]">
+                        {% if post.thumbnail %}<p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:100 }}</p>
+                        {% else %} <p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:250 }}</p>{% endif %}
                         <script>
                             // 이미지 태그를 제거하는 함수.
                             function removeImageTags(text, postId) {
                                 // 이미지 태그를 제거하는 정규 표현식.
                                 const regex = /!\[[^\]]*\]\([^\)]*\)/g;
-                                const cleanedText = text.replace(regex, '');  // 이미지 태그를 제거
+                                const cleanedText = text.replace(regex, '');  
                                 document.getElementById(`post_detail_text_${postId}`).textContent = cleanedText;  // 업데이트된 텍스트로 대체
                             }
                             removeImageTags(`{{ post.content|safe }}`, {{ post.pk }});
@@ -60,7 +60,7 @@
                         {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
                 </a>
                 <div class="post_likecount pr-4">
-                    <p class="pt-2 text-sm text-[#ECECEC]">좋아요: {{post.likecount}}</p>
+                    <p class="pt-2 text-sm text-[#ECECEC]">{{ post.like_button }}</p>
                 </div>
             </div>
         </div>

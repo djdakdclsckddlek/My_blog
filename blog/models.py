@@ -11,7 +11,7 @@ class Post(TimestampedModel):
     file_upload = models.FileField(
         upload_to='blog/files/%Y/%m/%d/', blank=True, null=True)
     views = models.IntegerField(default=0)
-    like_count = models.JSONField(default=dict, null=True, blank=True)
+    likes = models.ManyToManyField("accounts.User", related_name='liked_posts', blank=True)
     author = models.ForeignKey(
         "accounts.User", on_delete=models.CASCADE, related_name='posts')
     comments_count = models.IntegerField(default=0)

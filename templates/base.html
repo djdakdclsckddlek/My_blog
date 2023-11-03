@@ -62,7 +62,7 @@
 
         <div class='max-w-md mx-auto sm:block hidden'>
           <div class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
-              <div class="grid place-items-center h-full w-12 text-gray-300">
+              <div class="searchbutton grid place-items-center h-full w-12 text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -74,8 +74,8 @@
               id="search"
               name="q"
               value="{{ request.GET.q }}"
-              placeholder="검색" /> 
-              <input class="hidden" type="submit" value="검색" />
+              placeholder="{% if request.resolver_match.url_name == 'post_user' and user.nickname %}{{ user.nickname }}에서 {% else %}{% endif %}검색" /> 
+              <input class="hidden search" type="submit" value="검색" />
             </form>
           </div>
       </div>
@@ -157,6 +157,8 @@
   const mobilebutton = document.getElementById("mobile_button");
   const mobilemenu = document.getElementById('mobile-menu')
   const logoutbuttons = document.querySelectorAll('.logout')
+  const search_button = document.querySelector('.searchbutton')
+  const search = document.querySelector('.search')
 
   function toggleMenu() {
     menu.classList.toggle("hidden");
@@ -167,12 +169,19 @@
   function logout() {
     alert('로그아웃 되었습니다.')
   }
+  function search_post() {
+    search.click();
+  }
+
 
   mobilebutton.addEventListener("click", toggleMobileMenu);
   button.addEventListener("click", toggleMenu);
   for (const logoutbutton of logoutbuttons) {
     logoutbutton.addEventListener("click", logout);
   }
+
+  search_button.addEventListener("click", search_post );
+
 
 </script>
 

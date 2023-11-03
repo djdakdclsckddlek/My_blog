@@ -85,8 +85,7 @@
       <div class="comment_date text-[12px] text-gray-500">{{ comment.updated_at|date:"Y년 m월 d일 H:i" }}</div>
     </div>
   </div>
-  <textarea class="w-full bg-gray-300 resize-y mt-2 outline-0 readonly">{{ comment.comment }}</textarea>
-  <input type="button" value="n개의 답글">
+  <textarea class="post_comment w-full bg-gray-300 resize-y mt-2 outline-0 readonly">{{ comment.comment }}</textarea>
   {% endif %}
 
 
@@ -113,7 +112,7 @@
 
 
     {% if not comment.recomment %}
-      <form method="post" action="{% url 'blog:post_detail' post.pk %}">
+      <form method="post" class="post_recomment_create " action="{% url 'blog:post_detail' post.pk %}">
         {% csrf_token %}
         {{ comment_form.as_p }}
         <input type="hidden" name="recomment" value="{{ comment.id }}">
@@ -139,6 +138,7 @@
   const ols = document.querySelectorAll(".post-content ol");
   const ps = document.querySelectorAll(".post-content p");
   const imgs = document.querySelectorAll(".post-content img");
+
 
   h1s.forEach((h1) => {
     h1.classList.add("text-5xl");
@@ -183,5 +183,7 @@
         window.location.href = "{% url 'blog:post_delete' post.pk %}";
     }
 });
+
+
 </script>
 {% endblock scripts %}
