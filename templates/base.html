@@ -62,7 +62,7 @@
 
         <div class='max-w-md mx-auto sm:block hidden'>
           <div class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
-              <div class="searchbutton grid place-items-center h-full w-12 text-gray-300">
+              <div class="mobile_searchbutton grid place-items-center h-full w-12 text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -75,7 +75,7 @@
               name="q"
               value="{{ request.GET.q }}"
               placeholder="{% if request.resolver_match.url_name == 'post_user' and user.nickname %}{{ user.nickname }}에서 {% else %}{% endif %}검색" /> 
-              <input class="hidden search" type="submit" value="검색" />
+              <input class="hidden mobile_search" type="submit" value="검색" />
             </form>
           </div>
       </div>
@@ -112,8 +112,7 @@
             <!-- Active: "bg-gray-100", Not Active: "" -->
             <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
               tabindex="-1" id="user-menu-item-0">Your Profile</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-              id="user-menu-item-1">Settings</a>
+            
               {% if request.user.username %}
               <a href="{% url 'accounts:logout' %}" class="logout block px-4 py-2 text-sm text-gray-700" role="menuitem"
               tabindex="-1" id="user-menu-item-2">Sign out</a>
@@ -128,6 +127,26 @@
   <div class="hidden sm:hidden" id="mobile-menu">
     <div class="space-y-1 px-2 pb-3 pt-2">
       <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+      <div class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
+        <div class="searchbutton grid place-items-center h-full w-12 text-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+        <form action="" method="GET">
+        <input
+        class="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
+        type="text"
+        id="search"
+        name="q"
+        value="{{ request.GET.q }}"
+        placeholder="{% if request.resolver_match.url_name == 'post_user' and user.nickname %}{{ user.nickname }}에서 {% else %}{% endif %}검색" /> 
+        <input class="hidden search" type="submit" value="검색" />
+      </form>
+    </div>
+      
+      
+      
       {% if request.user.username %}
             <a href="{% url 'blog:post_user' request.user.username %}"
             {% else %}

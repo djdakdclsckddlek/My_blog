@@ -1,7 +1,7 @@
 from typing import Any
 from accounts.models import User
 from django.db.models import Count
-from .models import Post, Comment
+from .models import Post, Comment, Like
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -23,23 +23,24 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        #유저가 좋아요를 누른 글들의 pk값을 보내줌
+        liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
+        context['liked_posts'] = liked_post_pk
+        return context
+    
     #게시물 검색
     def get_queryset(self):
         qs = super().get_queryset()
         q = self.request.GET.get('q', '')
         if q:
             qs = qs.filter(Q(title__icontains=q) | Q(content__icontains=q) | Q(author__nickname__icontains=q))
-            qs = qs.annotate(like_count=Count('likes'))
+ 
         return qs
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        liked_posts = []
-        if self.request.user.is_authenticated:
-            liked_posts = self.request.user.liked_posts.values_list('pk', flat=True)
-        context['liked_posts'] = liked_posts
-        return context
+
 
 class PostListUserView(ListView):
 
@@ -50,6 +51,10 @@ class PostListUserView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = User.objects.get(username=self.kwargs['blog'])
+        user = self.request.user
+        #유저가 좋아요를 누른 글들의 pk값을 보내줌
+        liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
+        context['liked_posts'] = liked_post_pk
         return context
 
     # 이름으로 Post목록을 필터링
@@ -206,3 +211,25 @@ def fileUpload(request):
             'error': '비정상적인 접근입니다.',
         })
 
+def like_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method != 'POST':
+        return JsonResponse({'error': '잘못된 요청입니다.'}, status=400)
+
+    # 사용자의 좋아요 여부를 확인
+    liked = False
+    if request.user.is_authenticated:
+        liked = Like.objects.filter(user=request.user, post=post).exists()
+
+    # 좋아요 수를 업데이트합니다.
+    # Like 모델에 User, Postdml pk를 중계테이블로 사용
+    if liked:
+        Like.objects.filter(user=request.user, post=post).delete()
+        post.like_count -= 1
+    else:
+        Like.objects.create(user=request.user, post=post)
+        post.like_count += 1
+    post.save()
+
+    return JsonResponse({'like_count': post.like_count}, status=200)

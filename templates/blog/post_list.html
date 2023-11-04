@@ -1,8 +1,9 @@
 {% extends "base.html" %}{% load static %} <br />
 {% block title%}{% if order.popular %}{{ order.popular }}{% else %}글목록{% endif %}{%endblock title %}
-
 <hr />
 {% block content %}{% load markdown_deux_tags %}
+{% csrf_token %}
+
 <div class="max-w-7xl mx-auto">
     <p class="pl-4 pb-2 text-lg sm:text-3xl font-bold">{% if order.popular %}{{ order.popular }}{% else %}전체글{% endif %}</p>
     <div class="ml-5 mr-5 mb-4 border-2 border-zinc-700"></div>
@@ -60,7 +61,8 @@
                         {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
                 </a>
                 <div class="post_likecount pr-4">
-                    <p class="pt-2 text-sm text-[#ECECEC]">{{ post.like_count }}{% if post.id in liked_posts %}
+                    <p>좋아요 수: <span id="like-count-{{ post.id }}">{{ post.like_count }}</span></p>
+                    <p class="pt-2 text-sm text-[#ECECEC]">{% if post.id in liked_posts %}
                         <button class="unlike-button" data-post-id="{{ post.id }}">좋아요 취소</button>
                     {% else %}
                         <button class="like-button" data-post-id="{{ post.id }}">좋아요</button>
@@ -74,4 +76,40 @@
 </div>
 </div>
 {% endblock content %}
+{% block scripts %}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const csrftoken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+        $(document).ready(function () {
+            $(".like-button, .unlike-button").on("click", function () {
+                var postID = $(this).data("post-id"); // 클릭한 버튼의 data-post-id 값을 가져옴
+                var isLiking = $(this).hasClass("like-button"); // 클릭한 버튼이 like-button 가지고 있는지 확인
+                var url = "{% url 'blog:like_post' pk=0 %}".replace("0", postID);
+    
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                    },
+                    success: function (data) {
+                        // 업데이트된 좋아요 수를 템플릿에 반영
+                        $("#like-count-" + postID).text(data.like_count);
+                        // 좋아요 또는 좋아요 취소 버튼 토글
+                        if (isLiking) {
+                            $(this).addClass("unlike-button").removeClass("like-button").text("좋아요");;
+                        } else {
+                            $(this).addClass("like-button").removeClass("unlike-button").text("좋아요 취소");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    
+
+
+{% endblock scripts %}
+
 

@@ -1,6 +1,6 @@
 from django.db import models
 from core.models import TimestampedModel
-
+from accounts.models import User
 
 class Post(TimestampedModel):
 
@@ -11,7 +11,7 @@ class Post(TimestampedModel):
     file_upload = models.FileField(
         upload_to='blog/files/%Y/%m/%d/', blank=True, null=True)
     views = models.IntegerField(default=0)
-    likes = models.ManyToManyField("accounts.User", related_name='liked_posts', blank=True)
+    like_count = models.IntegerField(default=0)
     author = models.ForeignKey(
         "accounts.User", on_delete=models.CASCADE, related_name='posts')
     comments_count = models.IntegerField(default=0)
@@ -36,4 +36,7 @@ class Comment(TimestampedModel):
     comment = models.CharField(max_length=1000)
     # 대댓글 
     recomment = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='recomments')
-    
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
