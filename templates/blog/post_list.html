@@ -60,7 +60,12 @@
                         {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
                 </a>
                 <div class="post_likecount pr-4">
-                    <p class="pt-2 text-sm text-[#ECECEC]">{{ post.like_button }}</p>
+                    <p class="pt-2 text-sm text-[#ECECEC]">{{ post.like_count }}{% if post.id in liked_posts %}
+                        <button class="unlike-button" data-post-id="{{ post.id }}">좋아요 취소</button>
+                    {% else %}
+                        <button class="like-button" data-post-id="{{ post.id }}">좋아요</button>
+                    {% endif %}
+                </p>
                 </div>
             </div>
         </div>

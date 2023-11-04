@@ -1,12 +1,14 @@
 from typing import Any
 from accounts.models import User
+from django.db.models import Count
 from .models import Post, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
-from django.views.generic import CreateView, UpdateView, DetailView, ListView, DeleteView
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from django.core.exceptions import PermissionDenied
 from django.views import View
 
@@ -15,7 +17,6 @@ from .forms import PostForm, CommentForm
 from django.urls import reverse_lazy
 import os
 from uuid import uuid4
-
 
 class PostListView(ListView):
 
@@ -28,9 +29,17 @@ class PostListView(ListView):
         q = self.request.GET.get('q', '')
         if q:
             qs = qs.filter(Q(title__icontains=q) | Q(content__icontains=q) | Q(author__nickname__icontains=q))
+            qs = qs.annotate(like_count=Count('likes'))
         return qs
     
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        liked_posts = []
+        if self.request.user.is_authenticated:
+            liked_posts = self.request.user.liked_posts.values_list('pk', flat=True)
+        context['liked_posts'] = liked_posts
+        return context
 
 class PostListUserView(ListView):
 
@@ -196,3 +205,4 @@ def fileUpload(request):
             'success': False,
             'error': '비정상적인 접근입니다.',
         })
+
