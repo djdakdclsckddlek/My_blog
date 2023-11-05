@@ -83,6 +83,16 @@
     </div>
     {% endfor %}
 </div>
+<div class="pagination w-full text-center text-3xl my-4 hover:-translate-y-2 transition-all duration-500">
+    {% for page in page_range %}
+        {% if page == page_obj.number %}
+            <span class="pagination-current underline">{{ page }}</span>
+        {% else %}
+            <a href="?page={{ page }}" class="pagination-link">{{ page }}</a>
+        {% endif %}
+    {% endfor %}
+</div>
+  
 </div>
 {% endblock content %}
 {% block scripts %}

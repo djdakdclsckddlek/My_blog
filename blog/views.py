@@ -20,6 +20,8 @@ class PostListView(ListView):
 
     model = Post
     template_name = 'blog/post_list.html'
+    paginate_by = 4
+    page_range = 5
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -28,7 +30,22 @@ class PostListView(ListView):
         if user.is_authenticated:
             liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
             context['liked_posts'] = liked_post_pk
+
+        context['page_range'] = self.get_page_range(context['page_obj'], self.page_range)
         return context
+
+    def get_page_range(self, page_obj, page_range):
+        current_page = page_obj.number
+        total_pages = page_obj.paginator.num_pages
+
+        if total_pages <= page_range:
+            return range(1, total_pages + 1)
+        elif current_page <= page_range // 2:
+            return range(1, page_range + 1)
+        elif current_page >= total_pages - page_range // 2:
+            return range(total_pages - page_range + 1, total_pages + 1)
+        else:
+            return range(current_page - page_range // 2, current_page + page_range // 2 + 1)
     
     #게시물 검색
     def get_queryset(self):
@@ -45,17 +62,37 @@ class PostListUserView(ListView):
 
     model = Post
     template_name = 'blog/my_post.html'
-
+    paginate_by = 16
+    page_range = 5
+    
     # 'user' context에 User저장
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = User.objects.get(username=self.kwargs['blog'])
         user = self.request.user
+       
         #유저가 좋아요를 누른 글들의 pk값을 보내줌
-        liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
-        context['liked_posts'] = liked_post_pk
+        if user.is_authenticated:
+            liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
+            context['liked_posts'] = liked_post_pk
+        
+        context['page_range'] = self.get_page_range(context['page_obj'], self.page_range)
         return context
 
+    def get_page_range(self, page_obj, page_range):
+        current_page = page_obj.number
+        total_pages = page_obj.paginator.num_pages
+
+        if total_pages <= page_range:
+            return range(1, total_pages + 1)
+        elif current_page <= page_range // 2:
+            return range(1, page_range + 1)
+        elif current_page >= total_pages - page_range // 2:
+            return range(total_pages - page_range + 1, total_pages + 1)
+        else:
+            return range(current_page - page_range // 2, current_page + page_range // 2 + 1)
+    
+    
     # 이름으로 Post목록을 필터링
     def get_queryset(self):
         qs = super().get_queryset()
@@ -84,6 +121,8 @@ class PostPopularView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     queryset = Post.objects.all().order_by('-views')
+    paginate_by = 16
+    page_range = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -92,8 +131,23 @@ class PostPopularView(ListView):
         if user.is_authenticated:
             liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
             context['liked_posts'] = liked_post_pk
+        
+        context['page_range'] = self.get_page_range(context['page_obj'], self.page_range)
         return context
 
+    def get_page_range(self, page_obj, page_range):
+        current_page = page_obj.number
+        total_pages = page_obj.paginator.num_pages
+
+        if total_pages <= page_range:
+            return range(1, total_pages + 1)
+        elif current_page <= page_range // 2:
+            return range(1, page_range + 1)
+        elif current_page >= total_pages - page_range // 2:
+            return range(total_pages - page_range + 1, total_pages + 1)
+        else:
+            return range(current_page - page_range // 2, current_page + page_range // 2 + 1)
+    
 
 class PostDetailView(DetailView):
 
