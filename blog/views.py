@@ -20,7 +20,7 @@ class PostListView(ListView):
 
     model = Post
     template_name = 'blog/post_list.html'
-    paginate_by = 4
+    paginate_by = 16
     page_range = 5
     
     def get_context_data(self, **kwargs):
