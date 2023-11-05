@@ -41,9 +41,9 @@
                 </a>
                 <div class="post_subinfo ">
                     {% if post.updated_at %}
-                    <span class="post_date text-[12px] text-gray-500">{{ post.updated_at }}</span>
+                    <span class="post_date text-[12px] text-gray-500">{{ post.updated_at|date:"Y년 m월 d일 H:i" }}</span>
                     {% else %}
-                    <span class="post_date text-[12px]">{{ post.created_at }}</span>
+                    <span class="post_date text-[12px]">{{ post.created_at|date:"Y년 m월 d일 H:i" }}</span>
                     {% endif %}
                     <span class="post_comment text-[12px] text-gray-500">| {{ post.comments_count }}개의 댓글</span>
                     <div class="post_views">

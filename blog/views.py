@@ -88,6 +88,10 @@ class PostPopularView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['order'] = {'popular': '인기글'}
+        user = self.request.user
+        if user.is_authenticated:
+            liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
+            context['liked_posts'] = liked_post_pk
         return context
 
 
