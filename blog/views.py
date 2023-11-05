@@ -3,11 +3,9 @@ from accounts.models import User
 from django.db.models import Count
 from .models import Post, Comment, Like
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.db.models.query import QuerySet
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from django.core.exceptions import PermissionDenied
 from django.views import View
@@ -27,8 +25,9 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         #유저가 좋아요를 누른 글들의 pk값을 보내줌
-        liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
-        context['liked_posts'] = liked_post_pk
+        if user.is_authenticated:
+            liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
+            context['liked_posts'] = liked_post_pk
         return context
     
     #게시물 검색
@@ -232,4 +231,7 @@ def like_post(request, pk):
         post.like_count += 1
     post.save()
 
-    return JsonResponse({'like_count': post.like_count}, status=200)
+    return JsonResponse({
+        'like_count': post.like_count,
+        'is_liked': liked,
+        }, status=200)

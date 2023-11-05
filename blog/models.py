@@ -37,6 +37,6 @@ class Comment(TimestampedModel):
     # 대댓글 
     recomment = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='recomments')
 
-class Like(models.Model):
+class Like(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

@@ -60,17 +60,43 @@ https://github.com/Blood-donation-day/My_blog
 
 ## 3. 개발 일정
 
-## 4. URL 구조
+<img src="readme/WBS.png">
 
-## 5. 기능 요구사항 목록
+## 4. 데이터베이스 모델링(ERD)
 
-## 6. 데이터베이스 모델링(ERD)
+<img src="readme/mindmap.png">
+
+## 5. URL 구조
+
+|    `account`    |      name       |                URL                 | 비고 |
+| :-------------: | :-------------: | :--------------------------------: | ---- |
+|   `회원가입`    |     Signup      |         `accounts/signup/`         |      |
+|    `로그인`     |    UserLogin    |         `accounts/login/`          |      |
+|   `로그아웃`    |   UserLogout    |         `accounts/logout`          |      |
+|    `내 정보`    |   UserProfile   |         `accounts/profile`         |      |
+| `회원정보 변경` |   UserUpdate    |         `accounts/update/`         |      |
+| `비밀번호 변경` | Change_Password | `accounts/update/change_password/` |      |
+
+|      `blog`      |     name     |           URL           | 비고 |
+| :--------------: | :----------: | :---------------------: | ---- |
+|    `글 목록`     |   PostList   |         `blog/`         |      |
+|    `인기 글`     | PostPopular  |     `blog/popular/`     |      |
+| `사용자 글 목록` | PostListUser | `blog/user/<str:blog>`  |      |
+|    `글 상세`     |  PostDetail  |     `blog/<int:pk>`     |      |
+|    `글 생성`     |  PostCreate  |     `blog/create/`      |      |
+|    `글 수정`     |  PostUpdate  | `blog/update/<int:pk>/` |      |
+|    `글 삭제`     |  PostUpdate  | `blog/delete/<int:pk>/` |      |
+|  `파일 업로드`   |  PostUpdate  |     ` blog/upload`      |      |
+
+## 6. 기능 요구사항 목록
 
 ## 7. UI
 
-## 8. 기능
+## 9. 개발과정과 느낀점
 
-## 9. 개발하면서 느낀 점
+### 이슈들
+
+#### 마치며
 
 <!-- https://www.erdcloud.com/d/Nc268EwQ8d2csQMXe
 

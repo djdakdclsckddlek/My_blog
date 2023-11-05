@@ -10,7 +10,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pl-4 pr-4">
         {% for post in object_list %}
 
-        <div class="post-card flex flex-col">
+        <div class="post-card flex flex-col hover:-translate-y-2 transition-all">
             <div
                 class="bg-gray-600 hover:bg-gray-700 w-full rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out">
                 <a href="{% url 'blog:post_detail' post.pk %}">
@@ -60,14 +60,23 @@
                     <span class="pl-2 pt-2 text-[12px] text-[#757575]">by <b class="text-[#ECECEC]">
                         {% if post.author.nickname %}{{post.author.nickname }}{% else %}{{ post.author.username }}{% endif %}</b></span>
                 </a>
-                <div class="post_likecount pr-4">
-                    <p>좋아요 수: <span id="like-count-{{ post.id }}">{{ post.like_count }}</span></p>
-                    <p class="pt-2 text-sm text-[#ECECEC]">{% if post.id in liked_posts %}
-                        <button class="unlike-button" data-post-id="{{ post.id }}">좋아요 취소</button>
-                    {% else %}
-                        <button class="like-button" data-post-id="{{ post.id }}">좋아요</button>
-                    {% endif %}
-                </p>
+                <div class="post_likecount pr-4 pt-1">
+                    <p><span class="pt-2 text-sm text-[#ECECEC]">
+                        <button class="like-button" data-post-id="{{ post.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill=""
+                                class="bi bi-suit-heart-fill like-heart"
+                                viewBox="0 0 16 16"
+                                style="fill: {% if post.id in liked_posts %}rgba(255, 194, 185, 1){% else %}currentColor{% endif %}"
+                                >
+                                
+                                <path
+                                    d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
+                            </svg>
+                        </button>
+                    </span>
+                        <span class="" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
+                    </p>
                 </div>
             </div>
         </div>
@@ -80,11 +89,14 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // ajax요청을 js파일로 따로 빼니까 오류가 생겨 현재 파일에 그대로 작성
+
+        //csrf토큰
         const csrftoken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
         $(document).ready(function () {
-            $(".like-button, .unlike-button").on("click", function () {
+            $(".like-button").on("click", function () {
                 var postID = $(this).data("post-id"); // 클릭한 버튼의 data-post-id 값을 가져옴
-                var isLiking = $(this).hasClass("like-button"); // 클릭한 버튼이 like-button 가지고 있는지 확인
+                var clickedButton = $(this); 
                 var url = "{% url 'blog:like_post' pk=0 %}".replace("0", postID);
     
                 $.ajax({
@@ -97,10 +109,10 @@
                         // 업데이트된 좋아요 수를 템플릿에 반영
                         $("#like-count-" + postID).text(data.like_count);
                         // 좋아요 또는 좋아요 취소 버튼 토글
-                        if (isLiking) {
-                            $(this).addClass("unlike-button").removeClass("like-button").text("좋아요");;
+                        if (data.is_liked) {
+                            clickedButton.find(".like-heart").css("fill", "currentColor");
                         } else {
-                            $(this).addClass("like-button").removeClass("unlike-button").text("좋아요 취소");
+                            clickedButton.find(".like-heart").css("fill", "rgba(255, 194, 185, 1)");
                         }
                     }
                 });
