@@ -178,6 +178,8 @@
   const logoutbuttons = document.querySelectorAll('.logout')
   const search_button = document.querySelector('.searchbutton')
   const search = document.querySelector('.search')
+  const mobile_searchbutton =  document.querySelector('.mobile_searchbutton')
+  const mobile_search = document.querySelector('.mobile_search')
 
   function toggleMenu() {
     menu.classList.toggle("hidden");
@@ -191,7 +193,9 @@
   function search_post() {
     search.click();
   }
-
+  function mobile_search_post() {
+    mobile_search.click();
+  }
 
   mobilebutton.addEventListener("click", toggleMobileMenu);
   button.addEventListener("click", toggleMenu);
@@ -200,6 +204,7 @@
   }
 
   search_button.addEventListener("click", search_post );
+  mobile_searchbutton.addEventListener("click", mobile_search_post );
 
 
 </script>
@@ -207,5 +212,9 @@
 <body class="font-sans bg-gray-300 pt-20">
   {% block content %} {% endblock content %}
 </body>
+<footer class="pt-4 my-md-5 pt-md-5 border-top w-full text-center">
+  <p class="text-sm">&copy; 2023. My_Blog KIMCHANGHWAN</p>
+</footer>
+
 {% block scripts %}{% endblock scripts %}
 </html>

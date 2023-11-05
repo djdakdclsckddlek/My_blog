@@ -33,6 +33,7 @@
   <span class="post_date text-[12px]">{{ post.created_at|date:"Y년 m월 d일 H:i" }}</span>
   {% endif %}
 </div>
+<p class="border-gray-800 border-2"></p>
 {% if object.file_upload %}
 <p>첨부파일: {{ object.file_upload.name }}({{ object.file_upload.size }}B) <a href="{{ object.file_upload.url }}" target="_blank">다운로드</a></p>
 {% else %}{% endif %}
@@ -112,9 +113,12 @@
 
 
     {% if not comment.recomment %}
-      <form method="post" class="post_recomment_create " action="{% url 'blog:post_detail' post.pk %}">
+      <form method="post" class="post_recomment_create ml-6 pl-2 pt-2" action="{% url 'blog:post_detail' post.pk %}">
         {% csrf_token %}
-        {{ comment_form.as_p }}
+        <p>
+          <input class="rounded" type="text" name="comment" maxlength="1000" required="" id="id_comment">
+            <input type="hidden" name="recomment" id="id_recomment"> 
+        </p>
         <input type="hidden" name="recomment" value="{{ comment.id }}">
         <button type="submit">대댓글 작성</button>
       </form>

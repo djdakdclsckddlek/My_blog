@@ -10,7 +10,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pl-4 pr-4">
         {% for post in object_list %}
 
-        <div class="post-card flex flex-col hover:-translate-y-2 transition-all">
+        <div class="post-card flex flex-col hover:-translate-y-2 transition-all duration-500">
             <div
                 class="bg-gray-600 hover:bg-gray-700 w-full rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out">
                 <a href="{% url 'blog:post_detail' post.pk %}">
@@ -83,7 +83,7 @@
     </div>
     {% endfor %}
 </div>
-<div class="pagination w-full text-center text-3xl my-4 hover:-translate-y-2 transition-all duration-500">
+<div class="pagination w-full text-center text-3xl my-4 ">
     {% for page in page_range %}
         {% if page == page_obj.number %}
             <span class="pagination-current underline">{{ page }}</span>

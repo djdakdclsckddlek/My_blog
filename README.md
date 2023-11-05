@@ -110,6 +110,8 @@ https://github.com/Blood-donation-day/My_blog
 
 페이지네이션
 
+검색과 페이지네이션
+
 
 
 

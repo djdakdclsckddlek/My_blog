@@ -135,6 +135,14 @@ class PostPopularView(ListView):
         context['page_range'] = self.get_page_range(context['page_obj'], self.page_range)
         return context
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        q = self.request.GET.get('q', '')
+        if q:
+            qs = qs.filter(Q(title__icontains=q) | Q(content__icontains=q) | Q(author__nickname__icontains=q))
+ 
+        return qs
+
     def get_page_range(self, page_obj, page_range):
         current_page = page_obj.number
         total_pages = page_obj.paginator.num_pages
@@ -184,6 +192,9 @@ class PostDetailView(DetailView):
         comment_form = CommentForm(request.POST)
         
         if comment_form.is_valid():
+            user = self.request.user
+            if user.is_authenticated == False:
+                return redirect("accounts:login")
             comment = comment_form.save(commit=False)
             comment.post = post
             recomment_id = comment_form.cleaned_data.get('recomment')
