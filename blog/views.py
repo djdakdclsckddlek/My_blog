@@ -170,7 +170,7 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+        user = self.request.user
         #Comment 모델에서 post 필드가 현재 포스트와 같은 댓글들을 가져와 comments 변수에 할당
         post = self.get_object()
         #새로고침이 일어날때마다 뷰가 늘어나 조정

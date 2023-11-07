@@ -7,20 +7,20 @@
 [1. 목표와 기능](#1-목표와-기능)<br>
 [2. 개발 환경 및 배포 URL](#2-개발-환경-및-배포-url)<br>
 [3. 개발 일정](#3-개발-일정)<br>
-[4. URL 구조](#4-url-구조)<br>
-[5. 기능 요구사항 목록](#5-기능-요구사항-목록)<br>
-[6. 데이터베이스 모델링(ERD)](#6-데이터베이스-모델링erd)<br>
-[7. UI](#7-ui)<br>
-[8. 기능](#8-기능)<br>
-[9. 개발하면서 느낀 점](#9-개발하면서-느낀-점)<br>
+[4. 데이터베이스 모델링(ERD)](#4-데이터베이스-모델링erd)<br>
+[5. URL 구조](#5-url-구조)<br>
+[6. UI](#6-ui)<br>
+[7. 기능 요구사항 목록](#7-기능-요구사항-목록)<br>
+[8. 개발하면서 느낀 점](#8-개발과정과-느낀점)<br>
 
 ## 1. 목표와 기능
 
 ### 1-1. 목표
 
-- 장고를 사용하여 블로그 웹 어플리케이션을 개발한다.
+- 장고를 사용하여 블로그 웹 어플리케이션을 개발.
 - 각 사용자에 따라 글을 생성, 업데이트, 삭제할 수 있어야 한다.
-- 각 글을 읽고 댓글을 작성할 수 있어야 한다.
+- 각 글을 읽고 댓글 및 대댓글을 작성할 수 있어야 한다.
+- 모바일을 위한 반응형 페이지 제작
 
 ### 1-2. 기능
 
@@ -32,6 +32,13 @@
 - 전체 글 검색, 특정 사용자의 글 검색기능
 
 ## 2. 개발 환경 및 배포 URL
+
+배포 URL:
+
+Python 3.11.4
+Django==4.2.6
+Pillow==10.1.0
+django-markdown-deux==1.0.6
 
 #### [FrontEnd]
 
@@ -64,6 +71,7 @@ https://github.com/Blood-donation-day/My_blog
 
 ## 4. 데이터베이스 모델링(ERD)
 
+<img src="readme/ERD.png">
 <img src="readme/mindmap.png">
 
 ## 5. URL 구조
@@ -88,21 +96,54 @@ https://github.com/Blood-donation-day/My_blog
 |    `글 삭제`     |  PostUpdate  | `blog/delete/<int:pk>/` |      |
 |  `파일 업로드`   |  PostUpdate  |     ` blog/upload`      |      |
 
-## 6. 기능 요구사항 목록
+## 6. UI
 
-## 7. UI
+<img src="readme/signuplogin.png">
+<br><br>
+<img src="readme/profile_edit.png">
+<br><br>
+<img src="readme/mainpage.png">
+<br><br>
+<img src="readme/post_user.png">
+<br><br>
+<img src="readme/post_create.png">
+<br><br>
 
-## 9. 개발과정과 느낀점
+## 7. 기능 요구사항 목록
+
+- 회원가입, 로그인
+  <p align="center"><img src="readme/gif/signup.gif" align="center" width="45%">
+  <img src="readme/gif/login.gif" align="center" width="45%"></p>
+
+- 글목록 (PC, Mobile)
+<p align="center"><img src="readme/gif/post_list_pc.gif" align="center" width="50%">
+  <img src="readme/gif/post_list_mobile.gif" align="center" width="36%"></p>
+
+- 프로필 변경
+  <p align="center"><img src="readme/gif/porfile_edit.gif">
+- 글 쓰기, 글 수정
+   <p align="center"><img src="readme/gif/post_create.gif" align="center" width="45%">
+   <img src="readme/gif/post_edit.gif" align="center" width="50%">
+   </p>
+  사진을 드래그하거나 직접 선택해 업로드 할 수 있습니다.
+
+- 댓글, 대댓글
+   <p align="center"><img src="readme/gif/post_comment.gif">
+
+- 사용자 글 검색 (PC, Mobile)
+
+<p align="center"><img src="readme/gif/post_search_pc.gif" align="center" width="65%">
+  <img src="readme/gif/post_search_mobile.gif" align="center" width="30%"></p>
+
+## 8. 개발과정과 느낀점
 
 ### 이슈들
 
-#### 마치며
+### 마치며
 
 <!-- https://www.erdcloud.com/d/Nc268EwQ8d2csQMXe
 
 
-로그인하고 세션유지시간 1시간
-시크릿키 가리기
 
 404 403 페이지
 
@@ -166,6 +207,7 @@ script파일 나누기
             # 파일의 URL을 생성합니다.
             file_url = settings.MEDIA_URL + file_name
 이미지이름이 곂치면 기존의 이미지가나옴 >> uuid사용하여 랜덤이미지이름
+favcon?
 
 contentimage 모델 삭제
 -->
