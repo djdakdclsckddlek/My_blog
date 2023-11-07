@@ -101,7 +101,7 @@
               <span class="absolute -inset-1.5"></span>
               <span class="sr-only">Open user menu</span>
 
-              <img class="h-8 w-8 rounded-full" {% if user.profile_img %} src="{{ user.profile_img.url }}" {% else %}
+              <img class="h-8 w-8 rounded-full" {% if request.user.profile_img %} src="{{ request.user.profile_img.url }}" {% else %}
                 src="{% static 'img/profile-default.jpg' %}" {% endif %} alt="profile" />
             </button>
           </div>

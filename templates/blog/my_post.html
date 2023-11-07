@@ -17,7 +17,7 @@
             src="{% if user.profile_img %}{{ user.profile_img.url }}{% else %}{% static 'img/profile-default.jpg' %}{% endif %}"
             alt="profile_img">
         <div class="flex flex-col pr-6 flex-grow">
-            <h2 class="sm:pl-4 pt-2 sm:pt-6 text-2xl sm:text-3xl font-bold">{% if user.nickname %}{{ user.nickname }}{% else %}{{ user.username }}{% endif %}님의 블로그</h2>
+            <h2 class="sm:pl-4 pt-2 sm:pt-6 text-2xl sm:text-3xl font-bold ">{% if user.nickname %}{{ user.nickname }}{% else %}{{ user.username }}{% endif %}님의 블로그</h2>
             <div class="w-full sm:pl-4 pt-2">
             <textarea class="textarea bg-gray-300 resize-none overflow-hidden w-full sm:pl-4 text-md sm:text-lg" readonly>{% if user.introduce %}{{ user.introduce }}{% else %}자기소개를 해보세요.{% endif %}</textarea>
             </div>
@@ -41,7 +41,7 @@
             </div>
             <div class="post_content post_subinfo flex flex-col pt-1 pl-2 pr-2">
                 <a href="{% url 'blog:post_detail' post.pk %}">
-                    <p class="title text-[#ECECEC] text-xl font-bold">{{ post.title }}</p>
+                    <p class="title text-[#ECECEC] text-xl font-bold h-7 overflow-hidden">{{ post.title }}</p>
                     <div class="post_detail text-[#ECECEC] pt-1 text-sm overflow-hidden h-[{% if post.thumbnail %}5rem{% else %}15rem{% endif %}]">
                         {% if post.thumbnail %}<p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:100 }}</p>
                         {% else %} <p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:250 }}</p>{% endif %}

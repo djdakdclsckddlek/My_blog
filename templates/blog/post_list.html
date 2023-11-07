@@ -23,7 +23,7 @@
             </div>
             <div class="post_content post_subinfo flex flex-col pt-1 pl-2 pr-2">
                 <a href="{% url 'blog:post_detail' post.pk %}">
-                    <p class="title text-[#ECECEC] text-xl font-bold">{{ post.title }}</p>
+                    <p class="title text-[#ECECEC] text-xl font-bold h-7 overflow-hidden">{{ post.title }}</p>
                     <div class="post_detail text-[#ECECEC] pt-1 text-sm overflow-hidden h-[{% if post.thumbnail %}5rem{% else %}15rem{% endif %}]">
                         {% if post.thumbnail %}<p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:100 }}</p>
                         {% else %} <p class="post_detail_text" id="post_detail_text_{{ post.pk }}">{{ post.content | truncatechars:250 }}</p>{% endif %}
@@ -31,7 +31,7 @@
                             // 이미지 태그를 제거하는 함수.
                             function removeImageTags(text, postId) {
                                 // 이미지 태그를 제거하는 정규 표현식.
-                                const regex = /!\[[^\]]*\]\([^\)]*\)/g;
+                                const regex = /(!\[[^\]]*\]\([^\)]*\)|#)/g;
                                 const cleanedText = text.replace(regex, '');  
                                 document.getElementById(`post_detail_text_${postId}`).textContent = cleanedText;  // 업데이트된 텍스트로 대체
                             }
@@ -40,11 +40,9 @@
                     </div>
                 </a>
                 <div class="post_subinfo ">
-                    {% if post.updated_at %}
-                    <span class="post_date text-[12px] text-gray-500">{{ post.updated_at|date:"Y년 m월 d일 H:i" }}</span>
-                    {% else %}
-                    <span class="post_date text-[12px]">{{ post.created_at|date:"Y년 m월 d일 H:i" }}</span>
-                    {% endif %}
+
+                    <span class="post_date text-[12px] text-gray-500">{{ post.created_at|date:"Y년 m월 d일 H:i" }}</span>
+
                     <span class="post_comment text-[12px] text-gray-500">| {{ post.comments_count }}개의 댓글</span>
                     <div class="post_views">
                         <p class="text-sm text-gray-500">

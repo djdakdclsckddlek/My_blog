@@ -48,8 +48,8 @@
               class="text-center rounded"
               type="text"
               name="nickname"
-              value="{% if profile_user.nickname %}{{ profile_user.nickname }}"
-              placeholder="{%else%}닉네임을 설정해주세요.{% endif %}"
+              value="{% if profile_user.nickname %}{{ profile_user.nickname }}{% endif %}"
+              placeholder="닉네임을 설정해주세요."
               maxlength="50"
               id="id_nickname"
             />
@@ -63,9 +63,9 @@
         maxlength="200"
         id="id_introduce"
         rows="auto"
+        placeholder="자기소개를 해보세요."
       >
-      {% if profile_user.introduce %}{{ profile_user.introduce }}
-      {%else%}자기소개를 해보세요.{%endif %}
+
       </textarea>
       <div class="profile_detail pt-8 pl-4 pb-5">
         <p class="pt-4 text-lg font-medium">
