@@ -28,7 +28,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pl-4 pr-4">
         {% for post in object_list %}
 
-        <div class="post-card flex flex-col hover:-translate-y-2 transition-all">
+        <div class="post-card flex flex-col hover:-translate-y-2 transition-all duration-500">
             <div
                 class="bg-gray-600 hover:bg-gray-700 w-full rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out">
                 <a href="{% url 'blog:post_detail' post.pk %}">
@@ -114,46 +114,43 @@
 {% endblock content %}
 {% block scripts %}
     <script>
-        const csrftoken = document.querySelector("input[name=csrfmiddlewaretoken]").value;
-        document.addEventListener("DOMContentLoaded", function () {
-          const likeButtons = document.querySelectorAll(".like-button");
-          likeButtons.forEach((button) => {
-            button.addEventListener("click", function () {
-              const postid = button.dataset.postId;
-              const url = "{% url 'blog:like_post' pk=0 %}".replace("0", postid);
-              fetch(url, {
-                method: "POST",
-                headers: {
-                  "X-CSRFToken": csrftoken,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  csrfmiddlewaretoken: csrftoken,
-                }),
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((data) => {
-                  // 업데이트된 좋아요 수를 템플릿에 반영
-                  const likeCountElement = document.getElementById(
-                    "like-count-" + postid
-                  );
-                  likeCountElement.textContent = data.like_count;
-        
-                  // 좋아요 또는 좋아요 취소 버튼 토글
-                  if (data.is_liked) {
-                    button.querySelector(".like-heart").style.fill = "currentColor";
-                  } else {
-                    button.querySelector(".like-heart").style.fill =
-                      "rgba(255, 194, 185, 1)";
-                  }
-                })
-                .catch((error) => {
-                  console.error("Fetch error:", error);
-                });
-            });
-          });
-        });
-    </script>
+const csrftoken = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+
+const likeButtons = document.querySelectorAll(".like-button");
+likeButtons.forEach((button) => {
+button.addEventListener("click", function () {
+    const postid = button.dataset.postId;
+    const url = "{% url 'blog:like_post' pk=0 %}".replace("0", postid);
+    fetch(url, {
+    method: "POST",
+    headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json",
+    },
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        // 업데이트된 좋아요 수를 템플릿에 반영
+        const likeCountElement = document.getElementById(
+        "like-count-" + postid
+        );
+        likeCountElement.textContent = data.like_count;
+
+        // 좋아요 또는 좋아요 취소 버튼 토글
+        if (data.is_liked) {
+        button.querySelector(".like-heart").style.fill = "currentColor";
+        } else {
+        button.querySelector(".like-heart").style.fill =
+            "rgba(255, 194, 185, 1)";
+        }
+    })
+    .catch((error) => {
+        console.error("Fetch error:", error);
+    });
+});
+});
+
+</script>
 {% endblock scripts %}

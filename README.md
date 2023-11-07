@@ -414,46 +414,111 @@ class Like(TimestampedModel):
 const csrftoken = document.querySelector(
   "input[name=csrfmiddlewaretoken]"
 ).value;
-document.addEventListener("DOMContentLoaded", function () {
-  const likeButtons = document.querySelectorAll(".like-button");
-  likeButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const postid = button.dataset.postId;
-      const url = "{% url 'blog:like_post' pk=0 %}".replace("0", postid);
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": csrftoken,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          csrfmiddlewaretoken: csrftoken,
-        }),
+const likeButtons = document.querySelectorAll(".like-button");
+likeButtons.forEach((button) => {
+  button.addEventListener("click", function () {
+    //data-post-id 값
+    const postid = button.dataset.postId;
+    const url = "{% url 'blog:like_post' pk=0 %}".replace("0", postid);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
       })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          // 업데이트된 좋아요 수를 템플릿에 반영
-          const likeCountElement = document.getElementById(
-            "like-count-" + postid
-          );
-          likeCountElement.textContent = data.like_count;
+      .then((data) => {
+        // 업데이트된 좋아요 수를 템플릿에 반영
+        const likeCountElement = document.getElementById(
+          "like-count-" + postid
+        );
+        likeCountElement.textContent = data.like_count;
 
-          // 좋아요 또는 좋아요 취소 버튼 토글
-          if (data.is_liked) {
-            button.querySelector(".like-heart").style.fill = "currentColor";
-          } else {
-            button.querySelector(".like-heart").style.fill =
-              "rgba(255, 194, 185, 1)";
-          }
-        })
-        .catch((error) => {
-          console.error("Fetch error:", error);
-        });
-    });
+        // 좋아요 또는 좋아요 취소 버튼 토글
+        if (data.is_liked) {
+          button.querySelector(".like-heart").style.fill = "currentColor";
+        } else {
+          button.querySelector(".like-heart").style.fill =
+            "rgba(255, 194, 185, 1)";
+        }
+      });
   });
 });
 ```
 
+각 글의 좋아요 버튼을 누르면 fetch 요청을 보냅니다. fetch url은 `data-post-id="{{ post.id }}` 에서 id값을 가져옵니다.
+`"{% url 'blog:like_post' pk=0 %}".replace("0", postid);` 로 url을 만들어 해당 url로 요청을 보냅니다.
+요청을 보낸 후 서버에서 받은 응답에따라 좋아요 여부를 표시해줍니다.
+
+```python
+def like_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method != 'POST':
+        return JsonResponse({'error': '잘못된 요청입니다.'}, status=400)
+
+    # 사용자의 좋아요 여부를 확인
+    liked = False
+    if request.user.is_authenticated:
+        liked = Like.objects.filter(user=request.user, post=post).exists()
+
+    # 좋아요 수를 업데이트합니다.
+    if liked:
+        Like.objects.filter(user=request.user, post=post).delete()
+        post.like_count -= 1
+    else:
+        Like.objects.create(user=request.user, post=post)
+        post.like_count += 1
+    post.save()
+
+    return JsonResponse({
+        'like_count': post.like_count,
+        'is_liked': liked,
+        }, status=200)
+```
+
+서버에서 POST요청이 들어오면 사용자가 전달해준 `post.pk`값에 좋아요를 눌렀는지 확인하고 좋아요 수를 저장합니다.
+
+그다음 클라이언트에 `like_count`, `is_liked` 를 JSON형식으로 넘겨줍니다.
+
+<p align="center"><img src="readme/like_response.png" width="36%">
+<img src="readme/gif/like_count.gif" width="20%">
+</p>
+
+이제 버튼을 클릭하면 받아온 like_count를 표시해주고, 내가 좋아요를 눌렀는지 여부를 알 수 있습니다.
+
+그러나 블로그를 새로고침하면 내가 좋아요를 했는지 알수없는 문제가 남았습니다.
+그래서 ListView에서 context데이터를 보낼 때 좋아요 여부도 같이 보내주어야 합니다.
+
+```python
+class PostListView(ListView):
+    model = Post
+    (...)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        #유저가 좋아요를 누른 글들의 pk값을 보내줌
+        if user.is_authenticated:
+            # 사용자가 좋아요한 포스트의 목록들을 "리스트"형태로 저장
+            liked_post_pk = Like.objects.filter(user=user).values_list('post__pk', flat=True)
+            context['liked_posts'] = liked_post_pk
+            (...)
+        return context
+```
+
+이제 새로고침을 하면 좋아요 여부도 함께 받아와 표시해 줄 수 있습니다.
+
 ### 마치며
+
+앞서 기술한 내용들과 함께 해당 프로젝트를 진행하며 여러 문제가 있었지만, 이번 프로젝트를 통해 Django 그리고 CBV에 좀 더 익숙해지는 기회였습니다.
+
+처음 서버에 대한 부분을 생각하면서 클라이언트가 보낸 데이터를 어떻게 처리해서 어디로 데이터를 보내줄 것인가? 에대한 고민을 많이 하였습니다. 이 프로젝트가 제 고민의 결과로 나타나서 만족하고 다음 프로젝트에 활용될 양분이 되었으면 합니다.
+
+가장 고민했던 부분이 위에 기술한 내용과 같이 비동기 통신을 통해 데이터를 주고받는 것이였고, 사용자 경험을 향상시킬 수 있었습니다.
+이 고민이 Django Rest Framework에 대해 접근할 수있는 계기가 되기도 하였습니다.
+
+앞으로도 다른 프로젝트를 진행하며 더 나은 개발자로 나아가겠습니다.
+끝까지 읽어주셔서 감사합니다.
