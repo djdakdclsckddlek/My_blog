@@ -38,13 +38,15 @@
         </a>
       </div>
     </div>
-    <p
-      class="bg-gray-400 rounded m-auto mt-4 pt-4 pl-2 pr-2 pb-2 text-lg font-medium"
-    >
-      {% if profile_user.introduce %} {{ profile_user.introduce }} {%else%}
-      자기소개를 해보세요. {%endif %}
-    </p>
-    <div class="profile_detail pt-8 pl-4">
+    <textarea
+        class="bg-gray-400 rounded m-auto mt-4 pt-2 pb-2 text-lg pl-2 font-medium w-full resize-none scrollbar-hide"
+        name="introduce"
+        maxlength="200"
+        id="id_introduce"
+        rows="3"
+        readonly
+        placeholder="자기소개를 해주세요.">{% if profile_user.introduce %}{{ profile_user.introduce }}{%else%}자기소개를 해주세요{%endif %}</textarea>
+      <div class="profile_detail pt-8 pl-4">
       <p class="pt-4 text-lg font-medium">
         사용자 이름: {{ profile_user.username }}
       </p>

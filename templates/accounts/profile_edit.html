@@ -58,15 +58,12 @@
         <div class="blank text-gray-300"></div>
       </div>
       <textarea
-        class="bg-gray-400 rounded m-auto mt-4 pt-4 pb-2 text-lg font-medium w-full resize-none scrollbar-hide"
+        class="bg-gray-400 rounded m-auto mt-4 pt-2 pb-2 pl-2 text-lg font-medium w-full resize-none scrollbar-hide"
         name="introduce"
         maxlength="200"
         id="id_introduce"
-        rows="auto"
-        placeholder="자기소개를 해보세요."
-      >
-
-      </textarea>
+        rows="3"
+        placeholder="자기소개를 해주세요.">{% if profile_user.introduce %}{{ profile_user.introduce }}{%else%}{%endif %}</textarea>
       <div class="profile_detail pt-8 pl-4 pb-5">
         <p class="pt-4 text-lg font-medium">
           사용자 이름:<input

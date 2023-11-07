@@ -34,13 +34,6 @@
 
 ## 2. 개발 환경 및 배포 URL
 
-배포 URL:
-
-Python 3.11.4
-Django==4.2.6
-Pillow==10.1.0
-django-markdown-deux==1.0.6
-
 #### [FrontEnd]
 
 <div>
@@ -64,7 +57,7 @@ django-markdown-deux==1.0.6
 
 ### 2-2. 배포 URL
 
-https://github.com/Blood-donation-day/My_blog
+http://52.79.248.150:8000/blog/
 
 ## 3. 프로젝트 구조와 개발 일정
 
@@ -146,8 +139,27 @@ https://github.com/Blood-donation-day/My_blog
 
 ## 4. 데이터베이스 모델링(ERD)
 
-<img src="readme/ERD.png">
 <img src="readme/mindmap.png">
+<img src="readme/ERD.png">
+
+### 공통모델
+
+처음 데이터베이스를 설계할 떄 모든 테이블 에는 만들어진 시간과, 수정된 시간이 있었습니다.
+
+```python
+class TimestampedModel(models.Model):
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # 추상화 메타 클래스로 선언
+        # 데이터베이스 테이블을 생성하지 않고 다른 모델에서 상속받아 사용
+        abstract = True
+        ordering = ['-created_at', '-updated_at']
+```
+
+모든 모델에서 `TimestampedModel`을 상속받아 사용하게하여 중복을 줄였습니다.
 
 ## 5. URL 구조
 
@@ -189,33 +201,43 @@ https://github.com/Blood-donation-day/My_blog
 - 회원가입, 로그인
   <p align="center"><img src="readme/gif/signup.gif" align="center" width="45%">
   <img src="readme/gif/login.gif" align="center" width="45%"></p>
-
+  회원가입 시 로그인 상태로 메인페이지로 이동합니다.
+<br>
 - 글목록 (PC, Mobile)
-<p align="center"><img src="readme/gif/post_list_pc.gif" align="center" width="50%">
-  <img src="readme/gif/post_list_mobile.gif" align="center" width="36%"></p>
-
+   <p align="center"><img src="readme/gif/post_list_pc.gif" align="center" width="50%">
+    <img src="readme/gif/post_list_mobile.gif" align="center" width="36%">
+   </p>
+   브라우저 크기에 따라 반응형 웹을 구현하였습니다.
+<br>
 - 프로필 변경
-  <p align="center"><img src="readme/gif/porfile_edit.gif">
+  <p align="center"><img src="readme/gif/porfile_edit.gif"></p>
+  프로필 사진을 클릭해 사진을 변경하고 닉네임, 자기소개를 설정합니다.
+<br>
 - 글 쓰기, 글 수정
    <p align="center"><img src="readme/gif/post_create.gif" align="center" width="45%">
    <img src="readme/gif/post_edit.gif" align="center" width="50%">
    </p>
   사진을 드래그하거나 직접 선택해 업로드 할 수 있습니다.
 
+글을 생성하는 페이지에서 사용 할 에디터로 <a href="https://ui.toast.com/">Toast UI Editor</a>를 선택했습니다.
+공식 <a href="https://github.com/nhn/tui.editor/tree/master/docs/ko">한글 문서</a>가 제공되며, UI가 깔끔해 해당 프로젝트에 적절하다고 판단했습니다.
+<br>
+
 - 댓글, 대댓글
-   <p align="center"><img src="readme/gif/post_comment.gif">
+   <p align="center"><img src="readme/gif/post_comment.gif"></p>
+  댓글과 답글을 작성할 수 있습니다.
+<br>
 
 - 사용자 글 검색 (PC, Mobile)
 
 <p align="center"><img src="readme/gif/post_search_pc.gif" align="center" width="65%">
   <img src="readme/gif/post_search_mobile.gif" align="center" width="30%"></p>
+  전체글, 또는 각 사용자의 글에서 검색할 수 있습니다.
+<br>
 
 ## 8. 개발과정과 느낀점
 
 #### 🍞 Toast UI Editor 이미지 업로드
-
-글을 생성하는 페이지에서 사용 할 에디터로 <a href="https://ui.toast.com/">Toast UI Editor</a>를 선택했습니다.
-공식 <a href="https://github.com/nhn/tui.editor/tree/master/docs/ko">한글 문서</a>가 제공되며, UI가 깔끔해 해당 프로젝트에 적절하다고 판단했습니다.
 
 기본적으로 해당 에디터는 이미지 업로드 기능을 제공하고 있습니다.
 
@@ -321,8 +343,7 @@ def fileUpload(request):
 서버에서 요청을 받으면, 확장자 뽑아 파일이름을 `uuid`.확장자명으로 변경합니다.
 다음 그 이미지의 URL을 만들어 클라이언트에 전달해줍니다.
 
-uuid로 이름을 변경하는 이유는, 이름을 변경하지 않고 올렸을 때, 만약 이름이 같은 이미지가 올라온다면
-새로운 이미지가 업로드되지 않고 기존 이미지만 남게됩니다. 그래서 이름을 uuid로 바꿔서 전달해주고 있습니다.
+uuid로 이름을 변경하는 이유는, 이름을 변경하지 않고 올렸을 때, 만약 이름이 같은 이미지가 올라온다면 새로운 이미지가 업로드되지 않고 기존 이미지만 남게됩니다. 그래서 이름을 uuid로 바꿔서 전달해주고 있습니다.
 
 <p align="center"><img src="readme/editor_base64_1.png" width="30%" height="222">
 <img src="readme/editor_uuid.png" width="50%">
@@ -360,35 +381,14 @@ uuid로 이름을 변경하는 이유는, 이름을 변경하지 않고 올렸�
 </div>
 ```
 
-썸네일이 있으면 100자, 없으면 250자까지 글 목록에서 미리 볼 수 있고 각 포스트마다 id= "post*detail_text*{{ post.pk }}" 를 가지고 있습니다.
+썸네일이 있으면 100자, 없으면 250자까지 글 목록에서 미리 볼 수 있고 각 포스트마다 `id= "post*detail_text*{{ post.pk }}"` 를 가지고 있어 id를 찾아서 정규표현식으로 문자를 제거했습니다.
 
-각각의 포스트에 대해 post.pk를 뽑아 마크다운 이미지를 제거하고 있습니다.
-
-<p align="center"><img src="readme/editor_img2.png" width="36%">
-<img src="readme/editor_img1.png" width="35%">
+<p align="center"><img src="readme/editor_img2.png" width="31%">
+<img src="readme/editor_img1.png" width="30%">
+<img src="readme/editor_img3.png" width="30%">
 </p>
 
-<br><br>
-
-### 📗모델
-
-데이터베이스를 설계한다고 생각했을 때 모든 테이블 에는 만들어진 시간과, 수정된 시간이 필요합니다.
-모델을 만들때 모두 넣는 방법도 있지만 기초 클래스를 활용하면 더 간단해 집니다.
-
-```python
-class TimestampedModel(models.Model):
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        # 추상화 메타 클래스로 선언
-        # 데이터베이스 테이블을 생성하지 않고 다른 모델에서 상속받아 사용
-        abstract = True
-        ordering = ['-created_at', '-updated_at']
-```
-
-모든 모델에서 `TimestampedModel`을 상속받아 사용하게하여 중복을 줄였습니다.
+<br>
 
 ### 👍좋아요
 
@@ -450,6 +450,7 @@ likeButtons.forEach((button) => {
 ```
 
 각 글의 좋아요 버튼을 누르면 fetch 요청을 보냅니다. fetch url은 `data-post-id="{{ post.id }}` 에서 id값을 가져옵니다.
+
 `"{% url 'blog:like_post' pk=0 %}".replace("0", postid);` 로 url을 만들어 해당 url로 요청을 보냅니다.
 요청을 보낸 후 서버에서 받은 응답에따라 좋아요 여부를 표시해줍니다.
 
@@ -490,8 +491,8 @@ def like_post(request, pk):
 
 이제 버튼을 클릭하면 받아온 like_count를 표시해주고, 내가 좋아요를 눌렀는지 여부를 알 수 있습니다.
 
-그러나 블로그를 새로고침하면 내가 좋아요를 했는지 알수없는 문제가 남았습니다.
-그래서 ListView에서 context데이터를 보낼 때 좋아요 여부도 같이 보내주어야 합니다.
+아직 블로그를 새로고침하면 내가 좋아요를 했는지 알수없는 문제가 남았습니다.
+그래서 ListView에서 context데이터를 보낼 때 좋아요 여부도 같이 보내주었습니다.
 
 ```python
 class PostListView(ListView):
