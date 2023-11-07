@@ -10,28 +10,36 @@ const editor = new toastui.Editor({
 });
 
 const uploadImages = (blob, callback) => {
-  let xhr = new XMLHttpRequest();
+  const url = "/blog/upload";
 
-  //이미지, csrf토큰을 가지고 /blog/upload로 POST요청
-  xhr.open("POST", "/blog/upload", true);
-  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": csrftoken,
+    },
+    body: createFormData(blob),
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error(
+          "이미지 업로드에 실패하였습니다. 다음에 다시 시도해주세요."
+        );
+      }
+    })
+    .then((data) => {
+      callback(data.url);
+    })
+    .catch((error) => {
+      callback(alert(error.message));
+    });
+};
 
+const createFormData = (blob) => {
   const formData = new FormData();
   formData.append("images", blob);
-
-  xhr.send(formData);
-
-  // 받은 imageURL을 이미지의 src로 사용
-  xhr.onload = function () {
-    if (xhr.status === 200) {
-      const imageUrl = JSON.parse(xhr.responseText).url;
-      callback(imageUrl);
-    } else {
-      callback(
-        alert("이미지 업로드에 실패하였습니다. 다음에 다시 시도해주세요.")
-      );
-    }
-  };
+  return formData;
 };
 
 const submit = document.querySelector(".submit");

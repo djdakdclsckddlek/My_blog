@@ -113,40 +113,47 @@
 </div>
 {% endblock content %}
 {% block scripts %}
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // ajax요청을 js파일로 따로 빼니까 오류가 생겨 현재 파일에 그대로 작성
-
-        //csrf토큰
-        const csrftoken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
-        $(document).ready(function () {
-            $(".like-button").on("click", function () {
-                var postID = $(this).data("post-id"); // 클릭한 버튼의 data-post-id 값을 가져옴
-                var clickedButton = $(this); 
-                var url = "{% url 'blog:like_post' pk=0 %}".replace("0", postID);
-    
-                $.ajax({
-                    url: url,
-                    method: "POST",
-                    data: {
-                        csrfmiddlewaretoken: csrftoken,
-                    },
-                    success: function (data) {
-                        // 업데이트된 좋아요 수를 템플릿에 반영
-                        $("#like-count-" + postID).text(data.like_count);
-                        // 좋아요 또는 좋아요 취소 버튼 토글
-                        if (data.is_liked) {
-                            clickedButton.find(".like-heart").css("fill", "currentColor");
-                        } else {
-                            clickedButton.find(".like-heart").css("fill", "rgba(255, 194, 185, 1)");
-                        }
-                    }
+        const csrftoken = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+        document.addEventListener("DOMContentLoaded", function () {
+          const likeButtons = document.querySelectorAll(".like-button");
+          likeButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              const postid = button.dataset.postId;
+              const url = "{% url 'blog:like_post' pk=0 %}".replace("0", postid);
+              fetch(url, {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": csrftoken,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  csrfmiddlewaretoken: csrftoken,
+                }),
+              })
+                .then((response) => {
+                  return response.json();
+                })
+                .then((data) => {
+                  // 업데이트된 좋아요 수를 템플릿에 반영
+                  const likeCountElement = document.getElementById(
+                    "like-count-" + postid
+                  );
+                  likeCountElement.textContent = data.like_count;
+        
+                  // 좋아요 또는 좋아요 취소 버튼 토글
+                  if (data.is_liked) {
+                    button.querySelector(".like-heart").style.fill = "currentColor";
+                  } else {
+                    button.querySelector(".like-heart").style.fill =
+                      "rgba(255, 194, 185, 1)";
+                  }
+                })
+                .catch((error) => {
+                  console.error("Fetch error:", error);
                 });
             });
+          });
         });
     </script>
-    
-
-
 {% endblock scripts %}
